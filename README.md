@@ -19,7 +19,7 @@ zl search vim                          # Search all sources at once.
 ### Pre-built binary (recommended)
 
 ```bash
-curl -Lo zl https://github.com/supercosti21/zero_layer/releases/latest/download/zl-x86_64-unknown-linux-gnu
+curl -Lo zl https://github.com/polpo21/zero_layer/releases/latest/download/zl-x86_64-unknown-linux-gnu
 chmod +x zl
 sudo mv zl /usr/local/bin/
 ```
@@ -28,7 +28,7 @@ Or install without sudo:
 
 ```bash
 mkdir -p ~/.local/bin
-curl -Lo ~/.local/bin/zl https://github.com/supercosti21/zero_layer/releases/latest/download/zl-x86_64-unknown-linux-gnu
+curl -Lo ~/.local/bin/zl https://github.com/polpo21/zero_layer/releases/latest/download/zl-x86_64-unknown-linux-gnu
 chmod +x ~/.local/bin/zl
 ```
 
@@ -37,7 +37,7 @@ chmod +x ~/.local/bin/zl
 Requires Rust 1.85+.
 
 ```bash
-git clone https://github.com/supercosti21/zero_layer.git
+git clone https://github.com/polpo21/zero_layer.git
 cd zero_layer
 cargo build --release
 cp target/release/zl ~/.local/bin/
@@ -299,7 +299,7 @@ All translation happens at install time. Installed packages run with zero overhe
 
 ```bash
 cargo build              # Build
-cargo test               # Run all 335 tests
+cargo test               # Run all 349 tests
 cargo clippy             # Lint
 cargo fmt                # Format
 ```
