@@ -62,7 +62,7 @@ impl Default for GithubPlugin {
             token: None,
             cache_dir: PathBuf::new(),
             client: reqwest::blocking::Client::builder()
-                .user_agent("zero-layer/0.1 (https://github.com/supercosti21/zero_layer)")
+                .user_agent("zero-layer/0.1 (https://github.com/polpo21/zero_layer)")
                 .build()
                 .unwrap_or_default(),
         }

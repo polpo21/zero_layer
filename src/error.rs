@@ -183,7 +183,7 @@ impl ZlError {
                 Some("Run with elevated permissions: sudo zl self-update")
             }
             ZlError::SelfUpdate(msg) if msg.contains("No binary found") => Some(
-                "No prebuilt binary for your architecture. Build from source: cargo install --git https://github.com/supercosti21/zero_layer",
+                "No prebuilt binary for your architecture. Build from source: cargo install --git https://github.com/polpo21/zero_layer",
             ),
             ZlError::SelfUpdate(_) => Some("Check your internet connection and try again"),
             ZlError::Archive(_) => {
