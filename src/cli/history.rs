@@ -52,13 +52,9 @@ fn handle_rollback(args: RollbackArgs, ctx: &AppContext) -> ZlResult<()> {
             HistoryAction::Install => {
                 // Undo install = remove the packages
                 println!("  Undoing install of: {}", entry.packages.join(", "));
-                for pkg_name in &entry.packages {
-                    // Parse "name-version" into name
-                    let name = pkg_name
-                        .rfind('-')
-                        .map(|pos| &pkg_name[..pos])
-                        .unwrap_or(pkg_name);
-                    if let Some(node) = ctx.db.get_package_by_name(name)? {
+                for pkg_key in &entry.packages {
+                    // History stores the exact "name-version" key
+                    if let Some(node) = ctx.db.get_package_by_key(pkg_key)? {
                         let pkg_key = format!("{}-{}", node.id.name, node.id.version);
                         let pkg_dir = ctx.paths.packages.join(&pkg_key);
 

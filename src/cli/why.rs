@@ -53,13 +53,9 @@ fn find_dependency_chain(
     }
 
     for rdep_key in &rdeps {
-        // rdep_key is "name-version"; extract name
-        let rdep_name = rdep_key
-            .rfind('-')
-            .map(|pos| &rdep_key[..pos])
-            .unwrap_or(rdep_key);
-
-        if let Some(rdep_node) = db.get_package_by_name(rdep_name)? {
+        // rdep_key is the exact "name-version" key
+        if let Some(rdep_node) = db.get_package_by_key(rdep_key)? {
+            let rdep_name = rdep_node.id.name.as_str();
             if rdep_node.explicit {
                 println!(
                     "{}-> {}-{} (explicitly installed)",

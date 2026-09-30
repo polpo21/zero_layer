@@ -80,7 +80,13 @@ impl ZlDatabase {
 
     /// Get a package by name and version
     pub fn get_package(&self, name: &str, version: &str) -> ZlResult<Option<PackageNode>> {
-        let key = format!("{}-{}", name, version);
+        self.get_package_by_key(&format!("{}-{}", name, version))
+    }
+
+    /// Get a package by its "name-version" key, as stored in PACKAGES and in
+    /// history entries. Prefer this over re-splitting the key: names and
+    /// versions can both contain hyphens ("dbus-glib" / "1.2-3").
+    pub fn get_package_by_key(&self, key: &str) -> ZlResult<Option<PackageNode>> {
         let txn = self
             .db
             .begin_read()
@@ -89,10 +95,7 @@ impl ZlDatabase {
             .open_table(PACKAGES)
             .map_err(|e| ZlError::Config(e.to_string()))?;
 
-        match table
-            .get(key.as_str())
-            .map_err(|e| ZlError::Config(e.to_string()))?
-        {
+        match table.get(key).map_err(|e| ZlError::Config(e.to_string()))? {
             Some(value) => {
                 let node: PackageNode = serde_json::from_slice(value.value())?;
                 Ok(Some(node))
@@ -769,6 +772,17 @@ mod tests {
         let got = db.get_package_by_name("foo").unwrap().unwrap();
         assert_eq!(got.id.name, "foo");
         assert_eq!(got.id.version, "2.0");
+    }
+
+    #[test]
+    fn test_get_package_by_key_with_hyphenated_version() {
+        let db = test_db();
+        db.put_package(&make_node("dbus-glib", "0.112-3")).unwrap();
+
+        let got = db.get_package_by_key("dbus-glib-0.112-3").unwrap().unwrap();
+        assert_eq!(got.id.name, "dbus-glib");
+        assert_eq!(got.id.version, "0.112-3");
+        assert!(db.get_package_by_key("dbus-glib-0.112").unwrap().is_none());
     }
 
     #[test]

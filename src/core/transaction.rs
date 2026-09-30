@@ -68,9 +68,10 @@ impl Transaction {
 
         // 1. Remove database entries in reverse
         for key in self.db_package_keys.iter().rev() {
-            // key is "name-version"; we need name and version separately
-            if let Some((name, version)) = split_package_key(key) {
-                if let Err(e) = db.remove_package(name, version) {
+            // Look the record up by its exact key: splitting "name-version"
+            // back apart is ambiguous when either half contains a hyphen.
+            if let Ok(Some(node)) = db.get_package_by_key(key) {
+                if let Err(e) = db.remove_package(&node.id.name, &node.id.version) {
                     error!("rollback: failed to remove package {key} from DB: {e}");
                 }
                 if let Err(e) = db.remove_files_for_package(key) {
@@ -80,7 +81,7 @@ impl Transaction {
                     error!("rollback: failed to remove dependency entries for {key}: {e}");
                 }
             } else {
-                warn!("rollback: could not parse package key '{key}' into name-version");
+                warn!("rollback: package '{key}' not found in DB, nothing to remove");
             }
         }
 
@@ -160,16 +161,6 @@ impl Drop for Transaction {
     }
 }
 
-/// Split a package key like "firefox-120.0" into ("firefox", "120.0").
-/// Splits on the *last* hyphen so names with hyphens (e.g. "dbus-glib-0.3") work correctly.
-fn split_package_key(key: &str) -> Option<(&str, &str)> {
-    let pos = key.rfind('-')?;
-    if pos == 0 || pos == key.len() - 1 {
-        return None;
-    }
-    Some((&key[..pos], &key[pos + 1..]))
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -219,21 +210,6 @@ mod tests {
     }
 
     #[test]
-    fn test_split_package_key() {
-        assert_eq!(
-            split_package_key("firefox-120.0"),
-            Some(("firefox", "120.0"))
-        );
-        assert_eq!(
-            split_package_key("dbus-glib-0.3"),
-            Some(("dbus-glib", "0.3"))
-        );
-        assert_eq!(split_package_key("noversion"), None);
-        assert_eq!(split_package_key("-bad"), None);
-        assert_eq!(split_package_key("bad-"), None);
-    }
-
-    #[test]
     fn test_rollback_cleans_filesystem() {
         let tmp = TempDir::new().unwrap();
 
@@ -279,7 +255,7 @@ mod tests {
         let node = PackageNode {
             id: PackageId {
                 name: "testpkg".into(),
-                version: "1.0".into(),
+                version: "1.0-2".into(),
                 source: "test".into(),
             },
             installed_files: vec![],
@@ -288,21 +264,22 @@ mod tests {
             installed_at: 0,
             explicit: true,
         };
+        // A hyphenated version must not be split into name "testpkg-1.0"
         db.put_package(&node).unwrap();
-        db.register_file("/zl/bin/testpkg", "testpkg-1.0").unwrap();
-        db.register_dependency("testpkg-1.0", "glibc").unwrap();
+        db.register_file("/zl/bin/testpkg", "testpkg-1.0-2").unwrap();
+        db.register_dependency("testpkg-1.0-2", "glibc").unwrap();
 
         // Verify the entries exist
-        assert!(db.get_package("testpkg", "1.0").unwrap().is_some());
+        assert!(db.get_package("testpkg", "1.0-2").unwrap().is_some());
         assert!(db.file_owner("/zl/bin/testpkg").unwrap().is_some());
 
         let mut txn = Transaction::new();
-        txn.track_db_package("testpkg-1.0");
+        txn.track_db_package("testpkg-1.0-2");
         txn.rollback(&db);
 
         // Everything should be cleaned up
-        assert!(db.get_package("testpkg", "1.0").unwrap().is_none());
+        assert!(db.get_package("testpkg", "1.0-2").unwrap().is_none());
         assert!(db.file_owner("/zl/bin/testpkg").unwrap().is_none());
-        assert!(db.get_dependencies("testpkg-1.0").unwrap().is_empty());
+        assert!(db.get_dependencies("testpkg-1.0-2").unwrap().is_empty());
     }
 }
