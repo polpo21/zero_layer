@@ -1,10 +1,23 @@
 <p align="center">
-  <img src="assets/logo.svg" alt="Zero Layer" width="120">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
+    <img src="assets/logo-light.svg" alt="Zero Layer" height="72">
+  </picture>
+</p>
+
+<p align="center">
+  <strong>One command. Any package. Any distro.</strong><br>
+  Universal Linux package manager with native binary translation.
+</p>
+
+<p align="center">
+  <a href="https://github.com/polpo21/zero_layer/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/polpo21/zero_layer?color=c8f560&amp;labelColor=0b0c0a&amp;label=release"></a>
+  <a href="https://github.com/polpo21/zero_layer/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/polpo21/zero_layer/ci.yml?branch=main&amp;labelColor=0b0c0a&amp;label=CI"></a>
+  <a href="LICENSE"><img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-c8f560?labelColor=0b0c0a"></a>
+  <a href="https://polpo21.github.io/zero_layer/"><img alt="Website" src="https://img.shields.io/badge/site-polpo21.github.io%2Fzero__layer-c8f560?labelColor=0b0c0a"></a>
 </p>
 
 # Zero Layer (ZL)
-
-**Universal Linux package manager with native binary translation.**
 
 Install packages from any source on any Linux distro. ZL translates binaries at install time — no containers, no VMs, zero runtime overhead.
 
