@@ -19,7 +19,7 @@
     function setTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
         var meta = $('#theme-color-meta');
-        if (meta) meta.setAttribute('content', theme === 'light' ? '#fbfbfd' : '#07070b');
+        if (meta) meta.setAttribute('content', theme === 'light' ? '#f4f2eb' : '#0b0c0a');
         var btn = $('#theme-toggle');
         if (btn) btn.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
         store('zl-theme', theme);
@@ -70,17 +70,45 @@
         resetCopyLabels();
     }
 
-    function initLang() {
-        var lang = store('zl-lang');
-        var param = new URLSearchParams(window.location.search).get('lang');
-        if (param && SUPPORTED.indexOf(param) !== -1) lang = param;
-        if (!lang || SUPPORTED.indexOf(lang) === -1) {
-            var browser = (navigator.language || DEFAULT_LANG).slice(0, 2).toLowerCase();
-            lang = SUPPORTED.indexOf(browser) !== -1 ? browser : DEFAULT_LANG;
-        }
-        translate(lang);
+    function metaContent(name) {
+        var el = $('meta[name="' + name + '"]');
+        return el ? el.getAttribute('content') : null;
+    }
 
+    function preferredLang() {
+        var param = new URLSearchParams(window.location.search).get('lang');
+        if (param && SUPPORTED.indexOf(param) !== -1) return param;
+        var saved = store('zl-lang');
+        if (saved && SUPPORTED.indexOf(saved) !== -1) return saved;
+        var browser = (navigator.language || DEFAULT_LANG).slice(0, 2).toLowerCase();
+        return SUPPORTED.indexOf(browser) !== -1 ? browser : DEFAULT_LANG;
+    }
+
+    function initLang() {
         var select = $('#lang-select');
+
+        // Built site (build.py): one static page per language. Switching
+        // language means going to that page, so every URL stays crawlable.
+        var pageLang = metaContent('zl-page-lang');
+        if (pageLang) {
+            var root = metaContent('zl-root') || '';
+            var urlFor = function (lang) { return root + (lang === DEFAULT_LANG ? '' : lang + '/') + window.location.hash; };
+            // Only the English root redirects, and only to a remembered or
+            // browser language; language pages never bounce the visitor.
+            if (pageLang === DEFAULT_LANG) {
+                var wanted = preferredLang();
+                if (wanted !== DEFAULT_LANG) { store('zl-lang', wanted); window.location.replace(urlFor(wanted)); return; }
+            }
+            translate(pageLang);
+            if (select) select.addEventListener('change', function (e) {
+                store('zl-lang', e.target.value);
+                window.location.href = urlFor(e.target.value);
+            });
+            return;
+        }
+
+        // Plain index.html (local preview): translate in place.
+        translate(preferredLang());
         if (select) select.addEventListener('change', function (e) { translate(e.target.value); });
     }
 
@@ -215,7 +243,7 @@
         { t: 'dim',     text: '  [1/4] Downloading   ████████████████  2.4 MB/s' },
         { t: 'ok',      text: '  [2/4] Verified SHA256 + GPG signature' },
         { t: 'ok',      text: '  [3/4] Patched 1 ELF  interpreter + RUNPATH' },
-        { t: 'ok',      text: '  [4/4] Installed ripgrep 14.1.1  [8 files, 5.1 MB]' },
+        { t: 'ok',      text: '  [4/4] Installed ripgrep 14.1.1   8 files · 5.1 MB' },
         { t: 'blank',   text: '' },
         { t: 'cmd',     text: 'rg --version' },
         { t: 'dim',     text: 'ripgrep 14.1.1' },

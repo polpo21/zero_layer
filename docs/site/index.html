@@ -3,42 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zero Layer — Universal Linux Package Manager</title>
+<title>Zero Layer — Universal Linux package manager for any distro</title>
 <meta name="description" content="Install packages from any source on any Linux distro. Zero Layer translates binaries natively at install time — no containers, no VMs, zero runtime overhead.">
-<meta name="keywords" content="linux, package manager, rust, elf, binary translation, pacman, apt, dnf, aur, nix, flatpak, cross-distribution, universal package manager">
 <meta name="author" content="polpo21">
-<meta name="robots" content="index, follow">
-<meta name="theme-color" content="#07070b" id="theme-color-meta">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#0b0c0a" id="theme-color-meta">
 <meta name="color-scheme" content="dark light">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Zero Layer">
-<meta property="og:title" content="Zero Layer — Universal Linux Package Manager">
-<meta property="og:description" content="Install software from 13 ecosystems onto any Linux distribution. Binaries are translated at install time — no containers, no VMs, zero runtime overhead.">
+<meta property="og:title" content="Zero Layer — Universal Linux package manager for any distro">
+<meta property="og:description" content="Install packages from any source on any Linux distro. Zero Layer translates binaries natively at install time — no containers, no VMs, zero runtime overhead.">
 <meta property="og:url" content="https://polpo21.github.io/zero_layer/">
+<meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://polpo21.github.io/zero_layer/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Zero Layer — one command, any package, any distro">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Zero Layer — Universal Linux Package Manager">
-<meta name="twitter:description" content="Install software from 13 ecosystems onto any Linux distribution. Zero runtime overhead, written in Rust.">
+<meta name="twitter:title" content="Zero Layer — Universal Linux package manager for any distro">
+<meta name="twitter:description" content="Install packages from any source on any Linux distro. Zero Layer translates binaries natively at install time — no containers, no VMs, zero runtime overhead.">
 <meta name="twitter:image" content="https://polpo21.github.io/zero_layer/og-image.png">
 
 <link rel="canonical" href="https://polpo21.github.io/zero_layer/">
 <link rel="alternate" hreflang="en" href="https://polpo21.github.io/zero_layer/">
-<link rel="alternate" hreflang="it" href="https://polpo21.github.io/zero_layer/?lang=it">
-<link rel="alternate" hreflang="fr" href="https://polpo21.github.io/zero_layer/?lang=fr">
-<link rel="alternate" hreflang="es" href="https://polpo21.github.io/zero_layer/?lang=es">
-<link rel="alternate" hreflang="de" href="https://polpo21.github.io/zero_layer/?lang=de">
+<link rel="alternate" hreflang="it" href="https://polpo21.github.io/zero_layer/it/">
+<link rel="alternate" hreflang="fr" href="https://polpo21.github.io/zero_layer/fr/">
+<link rel="alternate" hreflang="es" href="https://polpo21.github.io/zero_layer/es/">
+<link rel="alternate" hreflang="de" href="https://polpo21.github.io/zero_layer/de/">
 <link rel="alternate" hreflang="x-default" href="https://polpo21.github.io/zero_layer/">
 
 <meta name="google-site-verification" content="SOz7K9fn7Ufe9BBDrjT0qwhMdgkpUGnkn6G0N_oc8o0">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237c5bf0'/%3E%3Cstop offset='1' stop-color='%23a78bfa'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Cpath d='M10 11h10.5l-8.5 10h10.5' stroke='white' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 
 <script>
-/* Dark is the base theme; light only if the visitor chose it before. */
+/* Dark is the base theme; light only if the visitor chose it before.
+   The "js" class lets CSS hide reveal-on-scroll content only when the
+   script that reveals it is actually running. */
 (function () {
-    var t = 'dark';
+    var d = document.documentElement, t = 'dark';
     try { var s = localStorage.getItem('zl-theme'); if (s === 'light' || s === 'dark') t = s; } catch (e) {}
-    document.documentElement.setAttribute('data-theme', t);
+    d.setAttribute('data-theme', t);
+    d.className += ' js';
 })();
 </script>
 
@@ -53,7 +59,7 @@
   "operatingSystem": "Linux",
   "url": "https://polpo21.github.io/zero_layer/",
   "downloadUrl": "https://github.com/polpo21/zero_layer/releases/latest",
-  "softwareVersion": "0.3.0",
+  "softwareVersion": "0.3.1",
   "programmingLanguage": "Rust",
   "license": "https://opensource.org/licenses/MIT",
   "codeRepository": "https://github.com/polpo21/zero_layer",
@@ -62,23 +68,23 @@
 }
 </script>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&amp;family=Geist:wght@400..600&amp;family=Geist+Mono:wght@400..600&amp;display=swap">
 <link rel="stylesheet" href="assets/css/styles.css">
+<script src="assets/js/i18n.js" defer></script>
+<script src="assets/js/main.js" defer></script>
 </head>
 <body>
 
 <a class="skip-link" href="#main" data-i18n="skip">Skip to content</a>
-<div class="backdrop" aria-hidden="true"></div>
 
 <!-- ====================================================== NAV -->
 <header class="nav" id="nav">
     <div class="nav-inner">
         <a class="brand" href="#top" aria-label="Zero Layer">
-            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c5bf0"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs>
-                <rect width="32" height="32" rx="8" fill="url(#lg)"/>
-                <path d="M10 11h10.5l-8.5 10h10.5" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            </svg>
-            Zero Layer <span class="brand-sub">zl</span>
+            <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7"/><path d="M9.5 10.5h12l-11 11h12"/></svg>
+            <span>Zero Layer</span>
         </a>
 
         <nav class="nav-links" id="nav-links" aria-label="Main">
@@ -91,22 +97,25 @@
         </nav>
 
         <div class="nav-actions">
-            <div class="lang">
-                <svg class="globe" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <a class="gh-link" href="https://github.com/polpo21/zero_layer" target="_blank" rel="noopener" aria-label="GitHub">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2 0-.4-.5-1.6.2-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
+            </a>
+            <label class="lang">
+                <span class="visually-hidden" data-i18n="nav_lang">Language</span>
                 <select id="lang-select" data-i18n-attr="aria-label:nav_lang" aria-label="Language">
-                    <option value="en">English</option>
-                    <option value="it">Italiano</option>
-                    <option value="fr">Français</option>
-                    <option value="es">Español</option>
-                    <option value="de">Deutsch</option>
+                    <option value="en">EN</option>
+                    <option value="it">IT</option>
+                    <option value="fr">FR</option>
+                    <option value="es">ES</option>
+                    <option value="de">DE</option>
                 </select>
-            </div>
-            <button class="icon-btn theme-toggle" id="theme-toggle" type="button" aria-pressed="false" data-i18n-attr="aria-label:nav_theme" aria-label="Switch theme">
+            </label>
+            <button class="icon-btn" id="theme-toggle" type="button" aria-pressed="false" data-i18n-attr="aria-label:nav_theme" aria-label="Switch theme">
                 <svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
                 <svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
             </button>
             <button class="icon-btn menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" data-i18n-attr="aria-label:nav_menu" aria-label="Menu">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="8" x2="20" y2="8"/><line x1="4" y1="16" x2="20" y2="16"/></svg>
             </button>
         </div>
     </div>
@@ -117,302 +126,263 @@
 <span id="top"></span>
 
 <!-- ====================================================== HERO -->
-<section class="hero container">
-    <div class="reveal is-visible">
-        <span class="pill"><span class="dot"></span><span data-i18n="hero_badge">Open source — MIT licensed</span></span>
-        <h1>
-            <span data-i18n="hero_t1">One command.</span><br>
-            <span class="gradient-text" data-i18n="hero_t2">Any package. Any distro.</span>
-        </h1>
-        <p class="hero-lede" data-i18n="hero_lede">
-            Zero Layer is a universal Linux package manager. It installs software from 13 different ecosystems onto any distribution by translating binaries at install time — not at run time.
-        </p>
+<section class="hero">
+    <div class="container hero-grid">
+        <div class="hero-copy">
+            <p class="kicker"><span class="kicker-dot" aria-hidden="true"></span><span data-i18n="hero_badge">Open source — MIT licensed</span></p>
+            <h1>
+                <span class="h1-a" data-i18n="hero_t1">One command.</span>
+                <span class="h1-b" data-i18n="hero_t2">Any package. Any distro.</span>
+            </h1>
+            <p class="hero-lede" data-i18n="hero_lede">Zero Layer is a universal Linux package manager. It installs software from 13 different ecosystems onto any distribution by translating binaries at install time — not at run time.</p>
 
-        <div class="btn-row center">
-            <a class="btn btn-primary btn-lg" href="#start">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                <span data-i18n="hero_cta1">Get started</span>
-            </a>
-            <a class="btn btn-secondary btn-lg" href="https://github.com/polpo21/zero_layer" target="_blank" rel="noopener">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.79-.26.79-.58v-2.23c-3.34.73-4.03-1.42-4.03-1.42-.55-1.38-1.34-1.75-1.34-1.75-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6.01 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.19.7.8.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                <span data-i18n="hero_cta2">Read the source</span>
-            </a>
+            <div class="btn-row">
+                <a class="btn btn-primary" href="#start">
+                    <span data-i18n="hero_cta1">Get started</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a>
+                <a class="btn btn-ghost" href="https://github.com/polpo21/zero_layer" target="_blank" rel="noopener">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2 0-.4-.5-1.6.2-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
+                    <span data-i18n="hero_cta2">Read the source</span>
+                </a>
+            </div>
+
+            <div class="install-line">
+                <span class="prompt" aria-hidden="true">$</span>
+                <code id="hero-install">curl -Lo zl https://github.com/polpo21/zero_layer/releases/latest/download/zl-x86_64-unknown-linux-gnu</code>
+                <button class="copy-btn" type="button" data-copy-target="#hero-install">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    <span data-i18n="copy">Copy</span>
+                </button>
+            </div>
+            <p class="hero-note" data-i18n="hero_install_note">One binary. No runtime, no daemon, no dependencies.</p>
         </div>
 
-        <div class="install-line">
-            <span class="tick">$</span>
-            <code id="hero-install">curl -Lo zl https://github.com/polpo21/zero_layer/releases/latest/download/zl-x86_64-unknown-linux-gnu</code>
-            <button class="copy-btn" type="button" data-copy-target="#hero-install">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                <span data-i18n="copy">Copy</span>
-            </button>
+        <div class="terminal" role="img" aria-label="zl install ripgrep: found in 4 sources, verified, 1 ELF patched, installed">
+            <div class="terminal-bar">
+                <span class="terminal-title">~ — zl</span>
+                <span class="terminal-tag">x86_64 · glibc</span>
+            </div>
+            <div class="terminal-body" id="terminal-body" aria-hidden="true"></div>
         </div>
     </div>
 
-    <div class="terminal reveal">
-        <div class="terminal-bar">
-            <span class="tdot r"></span><span class="tdot y"></span><span class="tdot g"></span>
-            <span class="terminal-title">zsh — zero layer</span>
+    <div class="strip" aria-label="Sources">
+        <div class="container strip-inner">
+            <span class="strip-label" data-i18n="strip_label">Pulls packages from</span>
+            <div class="strip-track">
+                <ul class="strip-list">
+                    <li>pacman</li><li>AUR</li><li>apt</li><li>dnf</li><li>zypper</li><li>apk</li><li>xbps</li><li>portage</li><li>nix</li><li>flatpak</li><li>snap</li><li>AppImage</li><li>GitHub</li>
+                </ul>
+                <ul class="strip-list" aria-hidden="true">
+                    <li>pacman</li><li>AUR</li><li>apt</li><li>dnf</li><li>zypper</li><li>apk</li><li>xbps</li><li>portage</li><li>nix</li><li>flatpak</li><li>snap</li><li>AppImage</li><li>GitHub</li>
+                </ul>
+            </div>
         </div>
-        <div class="terminal-body" id="terminal-body" aria-hidden="true"></div>
     </div>
 
-    <div class="stats reveal">
-        <div class="stat">
-            <span class="stat-num" data-count="13">13</span>
-            <span class="stat-label" data-i18n="stat_sources">package sources</span>
-        </div>
-        <div class="stat">
-            <span class="stat-num">0<span style="font-size:0.6em">ms</span></span>
-            <span class="stat-label" data-i18n="stat_overhead">runtime overhead</span>
-        </div>
-        <div class="stat">
-            <span class="stat-num" data-count="349">349</span>
-            <span class="stat-label" data-i18n="stat_tests">tests, CI green</span>
-        </div>
-        <div class="stat">
-            <span class="stat-num">0</span>
-            <span class="stat-label" data-i18n="stat_cdeps">C dependencies</span>
-        </div>
+    <div class="container">
+        <dl class="stats">
+            <div class="stat"><dt data-i18n="stat_sources">package sources</dt><dd data-count="13">13</dd></div>
+            <div class="stat"><dt data-i18n="stat_overhead">runtime overhead</dt><dd>0<small>ms</small></dd></div>
+            <div class="stat"><dt data-i18n="stat_tests">tests, CI green</dt><dd data-count="357">357</dd></div>
+            <div class="stat"><dt data-i18n="stat_daemons">background daemons</dt><dd>0</dd></div>
+        </dl>
     </div>
 </section>
 
 <!-- ====================================================== WHY -->
-<section class="section section-alt" id="why">
+<section class="section" id="why">
     <div class="container">
-        <div class="sec-head center reveal">
-            <span class="eyebrow" data-i18n="why_eyebrow">The problem</span>
-            <h2 class="sec-title" data-i18n="why_title">Linux packaging is fragmented by design</h2>
+        <header class="sec-head reveal">
+            <p class="eyebrow" data-i18n="why_eyebrow">The problem</p>
+            <h2 data-i18n="why_title">Linux packaging is fragmented by design</h2>
             <p class="sec-lede" data-i18n="why_lede">Every distribution ships its own format, its own repository and its own idea of where files belong. The software you want is often packaged — just not for your system.</p>
-        </div>
+        </header>
 
-        <div class="grid-3 reveal-stagger">
-            <article class="card pain">
-                <div class="ico">✕</div>
+        <div class="pains reveal">
+            <article class="pain">
+                <span class="index" aria-hidden="true">01</span>
                 <h3 data-i18n="p1_t">The package exists, but not for you</h3>
-                <p data-i18n="p1_d">A tool is in the AUR, or only as a .deb, or only as a GitHub release. Your distro packaged it two years ago, or never.</p>
+                <p data-i18n="p1_d">A tool is in the AUR, or only as a .deb, or only as a GitHub release. Your distro packaged it two years ago, or never. You end up compiling from source or going without.</p>
             </article>
-            <article class="card pain">
-                <div class="ico">⏱</div>
+            <article class="pain">
+                <span class="index" aria-hidden="true">02</span>
                 <h3 data-i18n="p2_t">The workarounds cost you performance</h3>
-                <p data-i18n="p2_d">Containers, virtual machines and compatibility layers all solve this by adding a layer. You pay for it forever.</p>
+                <p data-i18n="p2_d">Containers, virtual machines and compatibility layers all solve this by adding a layer. You pay for it forever: startup latency, memory, disk, and a runtime that must keep running.</p>
             </article>
-            <article class="card pain">
-                <div class="ico">⚠</div>
+            <article class="pain">
+                <span class="index" aria-hidden="true">03</span>
                 <h3 data-i18n="p3_t">Manual installs rot silently</h3>
-                <p data-i18n="p3_d">Dropping a tarball into /opt works until a library moves. Nothing tracks the files, and nothing can cleanly undo it.</p>
+                <p data-i18n="p3_d">Dropping a tarball into /opt works until a library moves. Nothing tracks the files, nothing knows the dependencies, and nothing can cleanly undo it.</p>
             </article>
         </div>
     </div>
 </section>
 
 <!-- ====================================================== THE IDEA -->
-<section class="section" id="idea">
-    <div class="container">
-        <div class="split">
-            <div class="reveal">
-                <span class="eyebrow" data-i18n="what_eyebrow">The idea</span>
-                <h2 class="sec-title" data-i18n="what_title">Translate once, at install time</h2>
-                <p class="sec-lede" style="margin-bottom:var(--sp-5)" data-i18n="what_lede">A Linux binary is not tied to a distribution — it is tied to a handful of concrete facts: which dynamic linker loads it, and where its shared libraries live.</p>
-                <p style="margin-bottom:var(--sp-4)" data-i18n="what_p1">Zero Layer reads those fields with <strong>goblin</strong>, then rewrites them with <strong>elb</strong>.</p>
-                <p style="margin-bottom:var(--sp-5)" data-i18n="what_p2">After that the binary is simply a native binary on your machine.</p>
-
-                <ul style="list-style:none;display:grid;gap:10px">
-                    <li style="display:flex;gap:10px;align-items:flex-start;font-size:0.92rem;color:var(--text-2)"><span style="color:var(--green);font-weight:700">✓</span><span data-i18n="what_b1">No container runtime to install or keep running</span></li>
-                    <li style="display:flex;gap:10px;align-items:flex-start;font-size:0.92rem;color:var(--text-2)"><span style="color:var(--green);font-weight:700">✓</span><span data-i18n="what_b2">No performance penalty — it is the same machine code</span></li>
-                    <li style="display:flex;gap:10px;align-items:flex-start;font-size:0.92rem;color:var(--text-2)"><span style="color:var(--green);font-weight:700">✓</span><span data-i18n="what_b3">Files land in normal directories you can inspect</span></li>
-                    <li style="display:flex;gap:10px;align-items:flex-start;font-size:0.92rem;color:var(--text-2)"><span style="color:var(--green);font-weight:700">✓</span><span data-i18n="what_b4">Everything is tracked, and every install can be rolled back</span></li>
-                </ul>
-            </div>
-
-            <div class="codeblock reveal">
-                <pre><span class="c-note"># the ELF fields Zero Layer rewrites</span>
-
-<span class="c-note">── before ── (built for Arch)</span>
-<span class="c-cmd">PT_INTERP</span>  <span class="c-note">/lib64/ld-linux-x86-64.so.2</span>
-<span class="c-cmd">RUNPATH</span>    <span class="c-note">(none)</span>
-<span class="c-cmd">NEEDED</span>     <span class="c-note">libpcre2-8.so.0, libc.so.6</span>
-
-<span class="c-note">── after ──  (patched for this host)</span>
-<span class="c-cmd">PT_INTERP</span>  <span class="c-flag">/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2</span>
-<span class="c-cmd">RUNPATH</span>    <span class="c-flag">~/.local/share/zl/lib</span>
-<span class="c-cmd">NEEDED</span>     <span class="c-note">libpcre2-8.so.0, libc.so.6</span>
-
-<span class="c-note"># same machine code — it just knows
-# where it lives now</span></pre>
-            </div>
+<section class="section section-band" id="idea">
+    <div class="container split">
+        <div class="reveal">
+            <p class="eyebrow" data-i18n="what_eyebrow">The idea</p>
+            <h2 data-i18n="what_title">Translate once, at install time</h2>
+            <p class="sec-lede" data-i18n="what_lede">A Linux binary is not tied to a distribution — it is tied to a handful of concrete facts: which dynamic linker loads it, and where its shared libraries live. Both are recorded inside the ELF file, and both can be rewritten.</p>
+            <p class="prose" data-i18n="what_p1">Zero Layer reads those fields with <strong>goblin</strong>, then rewrites them with <strong>elb</strong> so they point at your system's real linker and library paths. It does this once, while installing.</p>
+            <p class="prose" data-i18n="what_p2">After that the binary is simply a native binary on your machine. There is no shim, no wrapper script, no sandbox and no supervising process. That is where the name comes from: the layer is zero.</p>
+            <ul class="checks">
+                <li data-i18n="what_b1">No container runtime to install or keep running</li>
+                <li data-i18n="what_b2">No performance penalty — it is the same machine code</li>
+                <li data-i18n="what_b3">Files land in normal directories you can inspect</li>
+                <li data-i18n="what_b4">Everything is tracked, and every install can be rolled back</li>
+            </ul>
         </div>
+
+        <figure class="elf reveal">
+            <figcaption class="elf-file"><span class="elf-name">/usr/bin/rg</span><span>ELF 64-bit LSB · x86-64</span></figcaption>
+            <div class="elf-panel elf-before">
+                <p class="elf-label"><span class="elf-sign" aria-hidden="true">−</span><span data-i18n="idea_before">built for Arch</span></p>
+                <dl>
+                    <div><dt>PT_INTERP</dt><dd>/usr/lib/ld-linux-x86-64.so.2</dd></div>
+                    <div><dt>RUNPATH</dt><dd>—</dd></div>
+                    <div><dt>NEEDED</dt><dd>libpcre2-8.so.0 · libc.so.6</dd></div>
+                </dl>
+            </div>
+            <div class="elf-arrow" aria-hidden="true"><span>zl</span></div>
+            <div class="elf-panel elf-after">
+                <p class="elf-label"><span class="elf-sign" aria-hidden="true">+</span><span data-i18n="idea_after">patched for this machine</span></p>
+                <dl>
+                    <div><dt>PT_INTERP</dt><dd>/lib64/ld-linux-x86-64.so.2</dd></div>
+                    <div><dt>RUNPATH</dt><dd>$ORIGIN/../lib:~/.local/share/zl/lib</dd></div>
+                    <div><dt>NEEDED</dt><dd>libpcre2-8.so.0 · libc.so.6</dd></div>
+                </dl>
+            </div>
+            <p class="elf-foot" data-i18n="idea_foot">Same machine code. It just knows where it lives now.</p>
+        </figure>
     </div>
 </section>
 
 <!-- ====================================================== PHILOSOPHY -->
-<section class="section section-alt" id="philosophy">
+<section class="section" id="philosophy">
     <div class="container">
-        <div class="sec-head center reveal">
-            <span class="eyebrow" data-i18n="phil_eyebrow">Philosophy</span>
-            <h2 class="sec-title" data-i18n="phil_title">Six principles behind every decision</h2>
+        <header class="sec-head reveal">
+            <p class="eyebrow" data-i18n="phil_eyebrow">Philosophy</p>
+            <h2 data-i18n="phil_title">Six principles behind every decision</h2>
             <p class="sec-lede" data-i18n="phil_lede">Zero Layer is opinionated. These are the rules the codebase is held to.</p>
-        </div>
+        </header>
 
-        <div class="grid-3 reveal-stagger">
-            <article class="card">
-                <div class="ico" style="background:rgba(124,91,240,0.14);color:var(--brand-2)">◎</div>
-                <h3 data-i18n="ph1_t">Zero overhead after install</h3>
-                <p data-i18n="ph1_d">All translation work happens once, during installation.</p>
-            </article>
-            <article class="card">
-                <div class="ico" style="background:rgba(96,165,250,0.14);color:var(--blue)">⌖</div>
-                <h3 data-i18n="ph2_t">Detect, never assume</h3>
-                <p data-i18n="ph2_d">Architecture, linker, libc and layout are probed from the running system.</p>
-            </article>
-            <article class="card">
-                <div class="ico" style="background:rgba(52,211,153,0.14);color:var(--green)">⇄</div>
-                <h3 data-i18n="ph3_t">Atomic or nothing</h3>
-                <p data-i18n="ph3_d">Every install runs inside a transaction that records what it touched.</p>
-            </article>
-            <article class="card">
-                <div class="ico" style="background:rgba(251,146,60,0.14);color:var(--orange)">◆</div>
-                <h3 data-i18n="ph4_t">One binary, no C</h3>
-                <p data-i18n="ph4_d">redb instead of SQLite, elb instead of patchelf, rustls instead of OpenSSL.</p>
-            </article>
-            <article class="card">
-                <div class="ico" style="background:rgba(244,114,182,0.14);color:var(--pink)">☰</div>
-                <h3 data-i18n="ph5_t">The user picks the source</h3>
-                <p data-i18n="ph5_d">When a package exists in several ecosystems, you choose.</p>
-            </article>
-            <article class="card">
-                <div class="ico" style="background:rgba(45,212,191,0.14);color:var(--teal)">↩</div>
-                <h3 data-i18n="ph6_t">Reversible by default</h3>
-                <p data-i18n="ph6_d">History, rollback, orphan detection and dry-run are core features.</p>
-            </article>
+        <div class="cells reveal">
+            <article class="cell"><span class="index" aria-hidden="true">/01</span><h3 data-i18n="ph1_t">Zero overhead after install</h3><p data-i18n="ph1_d">All translation work happens once, during installation. Nothing sits between your program and the kernel afterwards.</p></article>
+            <article class="cell"><span class="index" aria-hidden="true">/02</span><h3 data-i18n="ph2_t">Detect, never assume</h3><p data-i18n="ph2_d">Architecture, dynamic linker, libc, library directories and filesystem layout are all probed from the running system instead of hardcoded.</p></article>
+            <article class="cell"><span class="index" aria-hidden="true">/03</span><h3 data-i18n="ph3_t">Atomic or nothing</h3><p data-i18n="ph3_d">Every install runs inside a transaction that records what it touched. A failure anywhere unwinds the whole operation.</p></article>
+            <article class="cell"><span class="index" aria-hidden="true">/04</span><h3 data-i18n="ph4_t">One binary, no system libraries</h3><p data-i18n="ph4_d">redb instead of SQLite, elb instead of patchelf, rustls instead of OpenSSL. Written in Rust; the few native pieces (compression, crypto) are compiled in, so there is nothing to install next to it.</p></article>
+            <article class="cell"><span class="index" aria-hidden="true">/05</span><h3 data-i18n="ph5_t">The user picks the source</h3><p data-i18n="ph5_d">When a package exists in several ecosystems, Zero Layer shows all of them and lets you choose. It never silently decides for you.</p></article>
+            <article class="cell"><span class="index" aria-hidden="true">/06</span><h3 data-i18n="ph6_t">Reversible by default</h3><p data-i18n="ph6_d">History, rollback, orphan detection and dry-run are core features, not afterthoughts. You can always see what happened and undo it.</p></article>
         </div>
     </div>
 </section>
 
 <!-- ====================================================== HOW IT WORKS -->
-<section class="section" id="how">
-    <div class="container container-narrow">
-        <div class="sec-head center reveal">
-            <span class="eyebrow" data-i18n="how_eyebrow">How it works</span>
-            <h2 class="sec-title" data-i18n="how_title">What happens when you type install</h2>
+<section class="section section-band" id="how">
+    <div class="container">
+        <header class="sec-head reveal">
+            <p class="eyebrow" data-i18n="how_eyebrow">How it works</p>
+            <h2 data-i18n="how_title">What happens when you type install</h2>
             <p class="sec-lede" data-i18n="how_lede">Eight stages run between your command and a working binary. Each one is observable with -v, and any failure rolls the whole thing back.</p>
-        </div>
+        </header>
 
-        <div class="pipeline">
-            <div class="pstep reveal">
-                <div><h3 data-i18n="h1_t">Resolve</h3><p data-i18n="h1_d">Finds the package and walks its dependency tree recursively.</p><span class="pstep-meta" data-i18n="h1_m">cross-source resolution</span></div>
-            </div>
-            <div class="pstep reveal">
-                <div><h3 data-i18n="h2_t">Check conflicts</h3><p data-i18n="h2_d">Five classes are checked before anything is written.</p><span class="pstep-meta" data-i18n="h2_m">5 conflict types</span></div>
-            </div>
-            <div class="pstep reveal">
-                <div><h3 data-i18n="h3_t">Download</h3><p data-i18n="h3_d">Packages are fetched over four parallel threads with automatic retry.</p><span class="pstep-meta" data-i18n="h3_m">4 threads · retry</span></div>
-            </div>
-            <div class="pstep reveal">
-                <div><h3 data-i18n="h4_t">Verify</h3><p data-i18n="h4_d">SHA256 checksums are enforced and GPG signatures checked.</p><span class="pstep-meta" data-i18n="h4_m">SHA256 + GPG</span></div>
-            </div>
-            <div class="pstep reveal">
-                <div><h3 data-i18n="h5_t">Extract</h3><p data-i18n="h5_d">The archive format is detected, unpacked and normalised to FHS.</p><span class="pstep-meta" data-i18n="h5_m">9 archive formats</span></div>
-            </div>
-            <div class="pstep reveal">
-                <div><h3 data-i18n="h6_t">Patch</h3><p data-i18n="h6_d">Interpreter and RUNPATH are rewritten to match your system.</p><span class="pstep-meta" data-i18n="h6_m">goblin + elb</span></div>
-            </div>
-            <div class="pstep reveal">
-                <div><h3 data-i18n="h7_t">Install</h3><p data-i18n="h7_d">Files are placed atomically inside a transaction.</p><span class="pstep-meta" data-i18n="h7_m">atomic · rollback</span></div>
-            </div>
-            <div class="pstep reveal">
-                <div><h3 data-i18n="h8_t">Track</h3><p data-i18n="h8_d">Files, dependencies and the operation are written to an embedded database.</p><span class="pstep-meta" data-i18n="h8_m">redb + graph</span></div>
-            </div>
-        </div>
+        <ol class="pipeline reveal">
+            <li class="pstep"><span class="pstep-n" aria-hidden="true">01</span><h3 data-i18n="h1_t">Resolve</h3><p data-i18n="h1_d">Finds the package and walks its dependency tree recursively, detecting cycles. If a dependency is missing from the primary source, every other enabled source is queried and you choose.</p><span class="chip" data-i18n="h1_m">cross-source resolution</span></li>
+            <li class="pstep"><span class="pstep-n" aria-hidden="true">02</span><h3 data-i18n="h2_t">Check conflicts</h3><p data-i18n="h2_d">Five classes are checked before anything is written: file ownership, binary names, library sonames, declared conflicts and version constraints.</p><span class="chip" data-i18n="h2_m">5 conflict types</span></li>
+            <li class="pstep"><span class="pstep-n" aria-hidden="true">03</span><h3 data-i18n="h3_t">Download</h3><p data-i18n="h3_d">Packages are fetched straight from their native repositories over four parallel threads, with progress bars and automatic retry with backoff.</p><span class="chip" data-i18n="h3_m">4 threads · retry</span></li>
+            <li class="pstep"><span class="pstep-n" aria-hidden="true">04</span><h3 data-i18n="h4_t">Verify</h3><p data-i18n="h4_d">SHA256 checksums are enforced and GPG signatures are checked when the source provides them. An unverifiable signature is reported differently from a bad one.</p><span class="chip" data-i18n="h4_m">SHA256 + GPG</span></li>
+            <li class="pstep"><span class="pstep-n" aria-hidden="true">05</span><h3 data-i18n="h5_t">Extract</h3><p data-i18n="h5_d">The archive format is detected and unpacked — deb, rpm, tar, zst, xz, nar, squashfs, zip or AppImage — then normalised to a standard FHS layout.</p><span class="chip" data-i18n="h5_m">9 archive formats</span></li>
+            <li class="pstep"><span class="pstep-n" aria-hidden="true">06</span><h3 data-i18n="h6_t">Patch</h3><p data-i18n="h6_d">Every ELF binary is analysed, then its interpreter and RUNPATH are rewritten to match your system. Multi-binary packages are patched in parallel; static binaries are correctly left alone.</p><span class="chip" data-i18n="h6_m">goblin + elb</span></li>
+            <li class="pstep"><span class="pstep-n" aria-hidden="true">07</span><h3 data-i18n="h7_t">Install</h3><p data-i18n="h7_d">Files are placed atomically inside a transaction that records every file, directory, symlink and database row it creates. Any error unwinds all of it.</p><span class="chip" data-i18n="h7_m">atomic · rollback</span></li>
+            <li class="pstep"><span class="pstep-n" aria-hidden="true">08</span><h3 data-i18n="h8_t">Track</h3><p data-i18n="h8_d">Files, dependencies, ownership and the operation itself are written to an embedded database, which is what makes why, size, doctor and rollback possible later.</p><span class="chip" data-i18n="h8_m">redb + graph</span></li>
+        </ol>
     </div>
 </section>
 
 <!-- ====================================================== FEATURES -->
-<section class="section section-alt" id="features">
+<section class="section" id="features">
     <div class="container">
-        <div class="sec-head center reveal">
-            <span class="eyebrow" data-i18n="feat_eyebrow">Capabilities</span>
-            <h2 class="sec-title" data-i18n="feat_title">A complete package manager, not a demo</h2>
+        <header class="sec-head reveal">
+            <p class="eyebrow" data-i18n="feat_eyebrow">Capabilities</p>
+            <h2 data-i18n="feat_title">A complete package manager, not a demo</h2>
             <p class="sec-lede" data-i18n="feat_lede">Everything you would expect from your distro's tooling, plus the things it never had.</p>
-        </div>
+        </header>
 
-        <div class="bento reveal-stagger">
-            <article class="card card-feature span-4">
-                <div class="ico" style="background:rgba(124,91,240,0.14);color:var(--brand-2)">⚙</div>
+        <div class="bento reveal">
+            <article class="tile tile-wide tile-accent">
                 <h3 data-i18n="f1_t">Native binary translation</h3>
-                <p data-i18n="f1_d">ELF binaries are analysed with goblin and patched with elb at install time.</p>
-                <div class="tag-list"><span class="tag">goblin</span><span class="tag">elb</span><span class="tag">PT_INTERP</span><span class="tag">RUNPATH</span></div>
+                <p data-i18n="f1_d">ELF binaries are analysed with goblin and patched with elb at install time. The dynamic linker and RUNPATH are rewritten to match your system, so packages run at full native speed afterwards.</p>
+                <ul class="tags"><li>goblin</li><li>elb</li><li>PT_INTERP</li><li>RUNPATH</li></ul>
             </article>
-            <article class="card card-feature">
-                <div class="ico" style="background:rgba(52,211,153,0.14);color:var(--green)">⚡</div>
+            <article class="tile">
                 <h3 data-i18n="f2_t">13 sources in parallel</h3>
-                <p data-i18n="f2_d">Every enabled source is queried simultaneously and scored by relevance.</p>
+                <p data-i18n="f2_d">Every enabled source is queried simultaneously, results are scored by relevance, and AUR binary variants are discovered automatically.</p>
             </article>
-            <article class="card card-feature">
-                <div class="ico" style="background:rgba(251,146,60,0.14);color:var(--orange)">🔒</div>
+            <article class="tile">
                 <h3 data-i18n="f3_t">Atomic transactions</h3>
-                <p data-i18n="f3_d">An install either completes or leaves no trace.</p>
+                <p data-i18n="f3_d">An install either completes or leaves no trace. No half-written state, ever.</p>
             </article>
-            <article class="card card-feature span-4">
-                <div class="ico" style="background:rgba(45,212,191,0.14);color:var(--teal)">🛠</div>
+            <article class="tile tile-wide">
                 <h3 data-i18n="f4_t">Diagnostics built in</h3>
                 <p data-i18n="f4_d">doctor, audit, why, size, diff and history answer the questions package managers usually leave you guessing about.</p>
-                <div class="tag-list"><span class="tag">zl doctor</span><span class="tag">zl why</span><span class="tag">zl size</span><span class="tag">zl audit</span><span class="tag">zl diff</span></div>
+                <ul class="tags"><li>zl doctor</li><li>zl why</li><li>zl size</li><li>zl audit</li><li>zl diff</li></ul>
             </article>
-            <article class="card card-feature span-3">
-                <div class="ico" style="background:rgba(96,165,250,0.14);color:var(--blue)">⧉</div>
+            <article class="tile tile-half">
                 <h3 data-i18n="f5_t">Multi-version &amp; environments</h3>
-                <p data-i18n="f5_d">Install versions side by side, or spin up an ephemeral environment.</p>
+                <p data-i18n="f5_d">Install versions side by side and switch between them, or spin up an ephemeral environment that disappears when you exit the shell.</p>
             </article>
-            <article class="card card-feature span-3">
-                <div class="ico" style="background:rgba(244,114,182,0.14);color:var(--pink)">🛡</div>
+            <article class="tile tile-half">
                 <h3 data-i18n="f6_t">Security aware</h3>
-                <p data-i18n="f6_d">Checksums and signatures in, CVE lookups against OSV.dev out.</p>
+                <p data-i18n="f6_d">Checksums and signatures on the way in, CVE lookups against OSV.dev on the way out, plus pinning to freeze anything you do not want moving.</p>
             </article>
         </div>
     </div>
 </section>
 
 <!-- ====================================================== SOURCES -->
-<section class="section" id="sources">
+<section class="section section-band" id="sources">
     <div class="container">
-        <div class="sec-head center reveal">
-            <span class="eyebrow" data-i18n="src_eyebrow">Sources</span>
-            <h2 class="sec-title" data-i18n="src_title">Thirteen ecosystems, one interface</h2>
+        <header class="sec-head reveal">
+            <p class="eyebrow" data-i18n="src_eyebrow">Sources</p>
+            <h2 data-i18n="src_title">Thirteen ecosystems, one interface</h2>
             <p class="sec-lede" data-i18n="src_lede">Each source is a plugin implementing the same trait. Enable the ones you want per machine, or filter per command with --from.</p>
-        </div>
+        </header>
 
-        <div class="source-grid reveal">
-            <div class="source"><span class="source-dot" style="background:var(--blue)"></span><span class="source-name">pacman<span class="source-desc">Arch Linux</span></span></div>
-            <div class="source"><span class="source-dot" style="background:var(--brand-2)"></span><span class="source-name">aur<span class="source-desc">Arch User Repository</span></span></div>
-            <div class="source"><span class="source-dot" style="background:var(--orange)"></span><span class="source-name">apt<span class="source-desc">Debian · Ubuntu</span></span></div>
-            <div class="source"><span class="source-dot" style="background:var(--green)"></span><span class="source-name">dnf<span class="source-desc">Fedora · RHEL</span></span></div>
-            <div class="source"><span class="source-dot" style="background:var(--teal)"></span><span class="source-name">zypper<span class="source-desc">openSUSE · SLES</span></span></div>
-            <div class="source"><span class="source-dot" style="background:var(--pink)"></span><span class="source-name">apk<span class="source-desc">Alpine Linux</span></span></div>
-            <div class="source"><span class="source-dot" style="background:var(--red)"></span><span class="source-name">xbps<span class="source-desc">Void Linux</span></span></div>
-            <div class="source"><span class="source-dot" style="background:var(--blue)"></span><span class="source-name">portage<span class="source-desc">Gentoo binhost</span></span></div>
-            <div class="source"><span class="source-dot" style="background:var(--brand-2)"></span><span class="source-name">nix<span class="source-desc">nixpkgs</span></span></div>
-            <div class="source"><span class="source-dot" style="background:var(--green)"></span><span class="source-name">flatpak<span class="source-desc">Flathub</span></span></div>
-            <div class="source"><span class="source-dot" style="background:var(--orange)"></span><span class="source-name">snap<span class="source-desc">Snapcraft Store</span></span></div>
-            <div class="source"><span class="source-dot" style="background:var(--pink)"></span><span class="source-name">appimage<span class="source-desc">AppImageHub</span></span></div>
-            <div class="source"><span class="source-dot" style="background:var(--teal)"></span><span class="source-name">github<span class="source-desc">GitHub Releases</span></span></div>
-        </div>
+        <ul class="sources reveal">
+            <li><code>pacman</code><span>Arch Linux</span></li>
+            <li><code>aur</code><span>Arch User Repository</span></li>
+            <li><code>apt</code><span>Debian · Ubuntu</span></li>
+            <li><code>dnf</code><span>Fedora · RHEL</span></li>
+            <li><code>zypper</code><span>openSUSE · SLES</span></li>
+            <li><code>apk</code><span>Alpine Linux</span></li>
+            <li><code>xbps</code><span>Void Linux</span></li>
+            <li><code>portage</code><span>Gentoo binhost</span></li>
+            <li><code>nix</code><span>nixpkgs</span></li>
+            <li><code>flatpak</code><span>Flathub</span></li>
+            <li><code>snap</code><span>Snapcraft Store</span></li>
+            <li><code>appimage</code><span>AppImageHub</span></li>
+            <li><code>github</code><span>GitHub Releases</span></li>
+            <li class="sources-more"><a href="https://github.com/polpo21/zero_layer/blob/main/docs/plugin-status.md" target="_blank" rel="noopener" data-i18n="src_status_link">See live plugin status</a></li>
+        </ul>
 
-        <p class="center" style="margin-top:var(--sp-5);font-size:0.88rem;color:var(--text-3)">
-            <span data-i18n="src_note">Source availability depends on the upstream being reachable.</span>
-            <a href="https://github.com/polpo21/zero_layer/blob/main/docs/plugin-status.md" target="_blank" rel="noopener" style="color:var(--brand-2);text-decoration:none" data-i18n="src_status_link">See live plugin status</a>
+        <p class="fineprint">
+            <span data-i18n="src_note">Source availability depends on the upstream being reachable. The repository tracks the live status of every plugin.</span>
         </p>
     </div>
 </section>
 
 <!-- ====================================================== COMMANDS -->
-<section class="section section-alt" id="commands">
+<section class="section" id="commands">
     <div class="container container-narrow">
-        <div class="sec-head center reveal">
-            <span class="eyebrow" data-i18n="cmd_eyebrow">Commands</span>
-            <h2 class="sec-title" data-i18n="cmd_title">The interface, end to end</h2>
+        <header class="sec-head reveal">
+            <p class="eyebrow" data-i18n="cmd_eyebrow">Commands</p>
+            <h2 data-i18n="cmd_title">The interface, end to end</h2>
             <p class="sec-lede" data-i18n="cmd_lede">One binary, twenty-five commands, shell completions for bash, zsh and fish.</p>
-        </div>
+        </header>
 
         <div class="reveal" data-tabs>
             <div class="tabs" role="tablist" aria-label="Commands">
@@ -478,70 +448,65 @@
 </section>
 
 <!-- ====================================================== ARCHITECTURE -->
-<section class="section" id="architecture">
+<section class="section section-band" id="architecture">
     <div class="container">
-        <div class="sec-head center reveal">
-            <span class="eyebrow" data-i18n="arch_eyebrow">Under the hood</span>
-            <h2 class="sec-title" data-i18n="arch_title">Built to be boring in the right places</h2>
-            <p class="sec-lede" data-i18n="arch_lede">Predictable layout on disk, pure-Rust dependencies, and a test suite that runs on every push.</p>
-        </div>
+        <header class="sec-head reveal">
+            <p class="eyebrow" data-i18n="arch_eyebrow">Under the hood</p>
+            <h2 data-i18n="arch_title">Built to be boring in the right places</h2>
+            <p class="sec-lede" data-i18n="arch_lede">Predictable layout on disk, a Rust codebase with native code kept to a minimum, and a test suite that runs on every push.</p>
+        </header>
 
-        <div class="split" style="margin-bottom:var(--sp-6)">
+        <div class="split split-top">
             <div class="reveal">
-                <h3 style="margin-bottom:var(--sp-3)" data-i18n="arch_layout_t">Where things land</h3>
-                <p style="margin-bottom:var(--sp-4);font-size:0.94rem" data-i18n="arch_layout_d">Everything lives under one directory you own. Add bin to your PATH and nothing else on the system is touched.</p>
-                <h3 style="margin:var(--sp-6) 0 var(--sp-3)" data-i18n="arch_choices_t">Design constraints</h3>
-                <ul style="list-style:none;display:grid;gap:9px">
-                    <li style="display:flex;gap:10px;font-size:0.9rem;color:var(--text-2)"><span style="color:var(--brand-2)">▸</span><span data-i18n="ac1">Single binary with zero C dependencies</span></li>
-                    <li style="display:flex;gap:10px;font-size:0.9rem;color:var(--text-2)"><span style="color:var(--brand-2)">▸</span><span data-i18n="ac2">RUNPATH over RPATH, so LD_LIBRARY_PATH still works</span></li>
-                    <li style="display:flex;gap:10px;font-size:0.9rem;color:var(--text-2)"><span style="color:var(--brand-2)">▸</span><span data-i18n="ac3">Threads instead of an async runtime</span></li>
-                    <li style="display:flex;gap:10px;font-size:0.9rem;color:var(--text-2)"><span style="color:var(--brand-2)">▸</span><span data-i18n="ac4">Everything auto-detected from the running system</span></li>
-                    <li style="display:flex;gap:10px;font-size:0.9rem;color:var(--text-2)"><span style="color:var(--brand-2)">▸</span><span data-i18n="ac5">Rollback is a first-class path, not an error case</span></li>
-                    <li style="display:flex;gap:10px;font-size:0.9rem;color:var(--text-2)"><span style="color:var(--brand-2)">▸</span><span data-i18n="ac6">Zero clippy warnings, formatted, CI-gated</span></li>
+                <h3 data-i18n="arch_layout_t">Where things land</h3>
+                <p class="prose" data-i18n="arch_layout_d">Everything lives under one directory you own. Add bin to your PATH and nothing else on the system is touched.</p>
+                <h3 class="mt" data-i18n="arch_choices_t">Design constraints</h3>
+                <ul class="checks">
+                    <li data-i18n="ac1">Single binary; no system libraries to install</li>
+                    <li data-i18n="ac2">RUNPATH over RPATH, so LD_LIBRARY_PATH still works</li>
+                    <li data-i18n="ac3">Threads instead of an async runtime</li>
+                    <li data-i18n="ac4">Everything auto-detected from the running system</li>
+                    <li data-i18n="ac5">Rollback is a first-class path, not an error case</li>
+                    <li data-i18n="ac6">Zero clippy warnings, formatted, CI-gated</li>
                 </ul>
             </div>
 
-            <div class="codeblock reveal">
-<pre><span class="c-note">~/.local/share/zl/</span>
-  <span class="c-flag">bin/</span>        <span class="c-note">symlinks — add to PATH</span>
-  <span class="c-flag">lib/</span>        <span class="c-note">shared libraries</span>
-  <span class="c-flag">share/</span>      <span class="c-note">data files</span>
-  <span class="c-flag">etc/</span>        <span class="c-note">configuration</span>
-  <span class="c-flag">packages/</span>   <span class="c-note">one dir per name-version</span>
-  <span class="c-flag">cache/</span>      <span class="c-note">downloads</span>
-  <span class="c-flag">envs/</span>       <span class="c-note">ephemeral environments</span>
-  <span class="c-cmd">zl.redb</span>     <span class="c-note">package database</span>
-
-<span class="c-note"># nothing outside this tree is modified
-# removing the folder removes everything</span></pre>
-            </div>
-        </div>
-
-        <div class="reveal">
-            <h3 style="margin-bottom:var(--sp-4)" data-i18n="arch_stack_t">The stack</h3>
-            <div class="tag-list" style="margin-top:0">
-                <span class="tag">Rust 2024</span><span class="tag">goblin</span><span class="tag">elb</span><span class="tag">redb</span>
-                <span class="tag">petgraph</span><span class="tag">clap</span><span class="tag">reqwest + rustls</span><span class="tag">indicatif</span>
-                <span class="tag">quick-xml</span><span class="tag">sha2</span><span class="tag">zstd</span><span class="tag">tar</span><span class="tag">cpio</span>
+            <div class="reveal">
+                <div class="codeblock tree">
+<pre><span class="c-cmd">~/.local/share/zl/</span>
+├── <span class="c-flag">bin/</span>        <span class="c-note">symlinks — add to PATH</span>
+├── <span class="c-flag">lib/</span>        <span class="c-note">shared libraries</span>
+├── <span class="c-flag">share/</span>      <span class="c-note">data files</span>
+├── <span class="c-flag">etc/</span>        <span class="c-note">configuration</span>
+├── <span class="c-flag">packages/</span>   <span class="c-note">one dir per name-version</span>
+├── <span class="c-flag">cache/</span>      <span class="c-note">downloads</span>
+├── <span class="c-flag">envs/</span>       <span class="c-note">ephemeral environments</span>
+└── <span class="c-cmd">zl.redb</span>     <span class="c-note">package database</span></pre>
+                </div>
+                <h3 class="mt" data-i18n="arch_stack_t">The stack</h3>
+                <ul class="tags">
+                    <li>Rust 2024</li><li>goblin</li><li>elb</li><li>redb</li><li>petgraph</li><li>clap</li>
+                    <li>reqwest + rustls</li><li>indicatif</li><li>quick-xml</li><li>sha2</li><li>zstd</li><li>tar</li><li>cpio</li>
+                </ul>
             </div>
         </div>
     </div>
 </section>
 
 <!-- ====================================================== COMPARISON -->
-<section class="section section-alt" id="comparison">
+<section class="section" id="comparison">
     <div class="container">
-        <div class="sec-head center reveal">
-            <span class="eyebrow" data-i18n="cmp_eyebrow">Comparison</span>
-            <h2 class="sec-title" data-i18n="cmp_title">How it differs from the alternatives</h2>
+        <header class="sec-head reveal">
+            <p class="eyebrow" data-i18n="cmp_eyebrow">Comparison</p>
+            <h2 data-i18n="cmp_title">How it differs from the alternatives</h2>
             <p class="sec-lede" data-i18n="cmp_lede">Containers and universal package formats solve the same problem by isolating software. Zero Layer solves it by adapting software.</p>
-        </div>
+        </header>
 
         <div class="table-wrap reveal">
             <table class="compare">
                 <thead>
                     <tr>
-                        <th scope="col"></th>
+                        <th scope="col"><span class="visually-hidden">Tool</span></th>
                         <th scope="col" data-i18n="cmp_c1">Approach</th>
                         <th scope="col" data-i18n="cmp_c2">Runtime cost</th>
                         <th scope="col" data-i18n="cmp_c3">Disk cost</th>
@@ -549,12 +514,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row" class="col-zl" data-i18n="cmp_r1">Zero Layer</th>
-                        <td class="col-zl" data-i18n="cmp_r1a">Patch binaries at install</td>
-                        <td class="col-zl"><span class="yes" data-i18n="cmp_r1b">None</span></td>
-                        <td class="col-zl" data-i18n="cmp_r1c">Shared libraries, deduplicated</td>
-                        <td class="col-zl"><span class="yes" data-i18n="cmp_r1d">No</span></td>
+                    <tr class="row-zl">
+                        <th scope="row" data-i18n="cmp_r1">Zero Layer</th>
+                        <td data-i18n="cmp_r1a">Patch binaries at install</td>
+                        <td><span class="yes" data-i18n="cmp_r1b">None</span></td>
+                        <td data-i18n="cmp_r1c">Shared libraries, deduplicated</td>
+                        <td><span class="yes" data-i18n="cmp_r1d">No</span></td>
                     </tr>
                     <tr>
                         <th scope="row">Docker / Podman</th>
@@ -587,33 +552,31 @@
                 </tbody>
             </table>
         </div>
-        <p class="center" style="margin-top:var(--sp-4);font-size:0.86rem;color:var(--text-3);max-width:640px;margin-inline:auto" data-i18n="cmp_foot">
-            Manual installs match Zero Layer on overhead — and lose on everything else.
-        </p>
+        <p class="fineprint" data-i18n="cmp_foot">Manual installs match Zero Layer on overhead — and lose on everything else: nothing is tracked, nothing resolves dependencies, and nothing can undo it.</p>
     </div>
 </section>
 
 <!-- ====================================================== GET STARTED -->
-<section class="section" id="start">
+<section class="section section-band" id="start">
     <div class="container container-narrow">
-        <div class="sec-head center reveal">
-            <span class="eyebrow" data-i18n="start_eyebrow">Get started</span>
-            <h2 class="sec-title" data-i18n="start_title">Running in under a minute</h2>
+        <header class="sec-head reveal">
+            <p class="eyebrow" data-i18n="start_eyebrow">Get started</p>
+            <h2 data-i18n="start_title">Running in under a minute</h2>
             <p class="sec-lede" data-i18n="start_lede">One download, one line in your shell profile. No package manager needed to install the package manager.</p>
-        </div>
+        </header>
 
-        <div class="notice notice-ok reveal" style="margin-bottom:var(--sp-6)">
+        <p class="notice notice-ok reveal">
             <span class="notice-ico" aria-hidden="true">✓</span>
             <span>
-                <span data-i18n="rel_notice"><strong>v0.3.0</strong> is published, with prebuilt binaries for x86_64 and aarch64. Everything described on this page ships in it — no compiler needed.</span>
-                <a href="https://github.com/polpo21/zero_layer/releases/latest" target="_blank" rel="noopener" data-i18n="rel_notice_link">Release notes</a> →
+                <span data-i18n="rel_notice"><strong>v0.3.1</strong> is published, with prebuilt binaries for x86_64 and aarch64, glibc and musl. Everything described on this page ships in it — no compiler needed.</span>
+                <a class="link" href="https://github.com/polpo21/zero_layer/releases/latest" target="_blank" rel="noopener" data-i18n="rel_notice_link">Release notes</a> →
             </span>
-        </div>
+        </p>
 
-        <div style="display:grid;gap:var(--sp-6)">
-            <div class="start-step reveal">
-                <h3><span class="num">1</span><span data-i18n="s1_t">Install the binary</span></h3>
-                <p style="font-size:0.92rem" data-i18n="s1_d">Grab the latest release for your architecture. Use the second form if you would rather not use sudo.</p>
+        <ol class="steps">
+            <li class="step reveal">
+                <h3 data-i18n="s1_t">Install the binary</h3>
+                <p data-i18n="s1_d">Grab the latest release for your architecture. Use the second form if you would rather not use sudo.</p>
                 <div class="codeblock">
                     <button class="copy-btn" type="button" data-copy-target="#code-1"><span data-i18n="copy">Copy</span></button>
 <pre id="code-1"><span class="c-prompt">$</span> <span class="c-cmd">curl -Lo zl https://github.com/polpo21/zero_layer/releases/latest/download/zl-x86_64-unknown-linux-gnu</span>
@@ -622,13 +585,14 @@
 <span class="c-note"># or, without sudo:</span>
 <span class="c-prompt">$</span> <span class="c-cmd">mkdir -p ~/.local/bin &amp;&amp; mv zl ~/.local/bin/</span>
 
-<span class="c-note"># other builds: zl-x86_64-unknown-linux-musl, zl-aarch64-unknown-linux-musl</span></pre>
+<span class="c-note"># other builds: zl-x86_64-unknown-linux-musl,</span>
+<span class="c-note"># zl-aarch64-unknown-linux-gnu, zl-aarch64-unknown-linux-musl</span></pre>
                 </div>
-            </div>
+            </li>
 
-            <div class="start-step reveal">
-                <h3><span class="num">2</span><span data-i18n="s2_t">Put it on your PATH</span></h3>
-                <p style="font-size:0.92rem" data-i18n="s2_d">Zero Layer symlinks the executables it installs into its own bin directory.</p>
+            <li class="step reveal">
+                <h3 data-i18n="s2_t">Put it on your PATH</h3>
+                <p data-i18n="s2_d">Zero Layer symlinks the executables it installs into its own bin directory.</p>
                 <div class="codeblock">
                     <button class="copy-btn" type="button" data-copy-target="#code-2"><span data-i18n="copy">Copy</span></button>
 <pre id="code-2"><span class="c-note"># bash (~/.bashrc) or zsh (~/.zshrc)</span>
@@ -637,94 +601,63 @@
 <span class="c-note"># fish</span>
 <span class="c-cmd">fish_add_path ~/.local/share/zl/bin</span></pre>
                 </div>
-            </div>
+            </li>
 
-            <div class="start-step reveal">
-                <h3><span class="num">3</span><span data-i18n="s3_t">Install something</span></h3>
-                <p style="font-size:0.92rem" data-i18n="s3_d">Leave off --from and Zero Layer will search every enabled source and let you pick.</p>
+            <li class="step reveal">
+                <h3 data-i18n="s3_t">Install something</h3>
+                <p data-i18n="s3_d">Leave off --from and Zero Layer will search every enabled source and let you pick.</p>
                 <div class="codeblock">
                     <button class="copy-btn" type="button" data-copy-target="#code-3"><span data-i18n="copy">Copy</span></button>
 <pre id="code-3"><span class="c-prompt">$</span> <span class="c-cmd">zl install ripgrep</span>
 <span class="c-prompt">$</span> <span class="c-cmd">zl install sharkdp/bat</span> <span class="c-flag">--from github</span>
 <span class="c-prompt">$</span> <span class="c-cmd">zl doctor</span>                <span class="c-note"># confirm everything is healthy</span></pre>
                 </div>
-            </div>
-        </div>
+            </li>
+        </ol>
 
-        <p class="center" style="margin-top:var(--sp-6);font-size:0.88rem;color:var(--text-3)">
+        <p class="fineprint">
             <span data-i18n="start_alt">Prefer to build it yourself? Requires Rust 1.90 or newer.</span>
-            <a href="https://github.com/polpo21/zero_layer#build-from-source" target="_blank" rel="noopener" style="color:var(--brand-2);text-decoration:none">cargo build --release →</a>
+            <a class="link" href="https://github.com/polpo21/zero_layer#build-from-source" target="_blank" rel="noopener">cargo build --release →</a>
         </p>
     </div>
 </section>
 
 <!-- ====================================================== FAQ -->
-<section class="section section-alt" id="faq">
-    <div class="container container-narrow">
-        <div class="sec-head center reveal">
-            <span class="eyebrow" data-i18n="faq_eyebrow">FAQ</span>
-            <h2 class="sec-title" data-i18n="faq_title">Reasonable questions</h2>
-        </div>
+<section class="section" id="faq">
+    <div class="container faq-grid">
+        <header class="sec-head reveal">
+            <p class="eyebrow" data-i18n="faq_eyebrow">FAQ</p>
+            <h2 data-i18n="faq_title">Reasonable questions</h2>
+        </header>
 
         <div class="faq reveal">
-            <details>
-                <summary data-i18n="q1">Does this replace my distro's package manager?</summary>
-                <div class="faq-body" data-i18n="a1">No, and it does not try to.</div>
-            </details>
-            <details>
-                <summary data-i18n="q2">Do I need root?</summary>
-                <div class="faq-body" data-i18n="a2">No.</div>
-            </details>
-            <details>
-                <summary data-i18n="q3">Is it really zero overhead?</summary>
-                <div class="faq-body" data-i18n="a3">Yes.</div>
-            </details>
-            <details>
-                <summary data-i18n="q4">What if a package needs a library I do not have?</summary>
-                <div class="faq-body" data-i18n="a4">Dependencies are resolved recursively.</div>
-            </details>
-            <details>
-                <summary data-i18n="q5">What happens when an install fails halfway?</summary>
-                <div class="faq-body" data-i18n="a5">Nothing is left behind.</div>
-            </details>
-            <details>
-                <summary data-i18n="q6">Which distributions does it support?</summary>
-                <div class="faq-body" data-i18n="a6">Any of them, in principle.</div>
-            </details>
-            <details>
-                <summary data-i18n="q7">Is it production ready?</summary>
-                <div class="faq-body" data-i18n="a7">It is early software under active development.</div>
-            </details>
-            <details>
-                <summary data-i18n="q8">How do I get rid of it?</summary>
-                <div class="faq-body" data-i18n="a8">Delete the directory.</div>
-            </details>
+            <details><summary data-i18n="q1">Does this replace my distro's package manager?</summary><div class="faq-body" data-i18n="a1">No, and it does not try to. Zero Layer installs into your home directory and never touches system paths, so pacman, apt or dnf keep managing the base system exactly as before. Use it for the software your distro does not package.</div></details>
+            <details><summary data-i18n="q2">Do I need root?</summary><div class="faq-body" data-i18n="a2">No. The default installation lives entirely under <code>~/.local/share/zl</code>. Root is only relevant if you choose to put the <code>zl</code> binary itself in <code>/usr/local/bin</code>, and even that is optional.</div></details>
+            <details><summary data-i18n="q3">Is it really zero overhead?</summary><div class="faq-body" data-i18n="a3">Yes, because after installation there is nothing left running. The patched binary is ordinary machine code executed directly by the kernel — no sandbox, no supervisor, no translation at run time. The work happens once, while installing.</div></details>
+            <details><summary data-i18n="q4">What if a package needs a library I do not have?</summary><div class="faq-body" data-i18n="a4">Dependencies are resolved recursively before anything is downloaded, and if one is missing from the primary source, every other enabled source is searched. After install, a post-check warns about any shared library it still cannot locate.</div></details>
+            <details><summary data-i18n="q5">What happens when an install fails halfway?</summary><div class="faq-body" data-i18n="a5">Nothing is left behind. Every install runs inside a transaction that records the files, directories, symlinks and database entries it created, and any failure unwinds all of them. You can also preview any operation with <code>--dry-run</code>.</div></details>
+            <details><summary data-i18n="q6">Which distributions does it support?</summary><div class="faq-body" data-i18n="a6">Any of them, in principle. Rather than keeping a list, Zero Layer detects the architecture, dynamic linker, libc, library directories and filesystem layout at runtime — including merged-usr, NixOS, Guix, GoboLinux and Termux layouts.</div></details>
+            <details><summary data-i18n="q7">Is it production ready?</summary><div class="faq-body" data-i18n="a7">It is early software under active development, and honest about it: the repository tracks exactly which source plugins are verified against their live upstreams and which are still being repaired. The core install path is covered by 357 tests that gate every commit.</div></details>
+            <details><summary data-i18n="q8">How do I get rid of it?</summary><div class="faq-body" data-i18n="a8">Delete the directory. Everything Zero Layer installs — packages, database, cache, symlinks — lives under one folder, so removing it removes every trace.</div></details>
         </div>
     </div>
 </section>
 
 <!-- ====================================================== CTA -->
-<section class="section">
+<section class="cta-wrap">
     <div class="container">
         <div class="cta reveal">
             <h2 data-i18n="cta_title">Install anything, on anything</h2>
             <p data-i18n="cta_p">Free and open source under the MIT licence. No account, no telemetry, no daemon.</p>
-            <div class="btn-row center">
-                <a class="btn btn-primary btn-lg" href="https://github.com/polpo21/zero_layer/releases/latest" target="_blank" rel="noopener">
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <div class="btn-row">
+                <a class="btn btn-dark" href="https://github.com/polpo21/zero_layer/releases/latest" target="_blank" rel="noopener">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
                     <span data-i18n="cta_b1">Download latest release</span>
                 </a>
-                <a class="btn btn-secondary btn-lg" href="https://github.com/polpo21/zero_layer" target="_blank" rel="noopener">
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2 0-.4-.5-1.6.2-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
+                <a class="btn btn-outline-dark" href="https://github.com/polpo21/zero_layer" target="_blank" rel="noopener">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8l2.8 5.7 6.3.9-4.5 4.4 1 6.3-5.6-3-5.6 3 1-6.3-4.5-4.4 6.3-.9z"/></svg>
                     <span data-i18n="cta_b2">Star on GitHub</span>
                 </a>
-            </div>
-            <div class="notice notice-ok notice-inline">
-                <span class="notice-ico" aria-hidden="true">✓</span>
-                <span>
-                    <span data-i18n="rel_notice"><strong>v0.3.0</strong> is published, with prebuilt binaries for x86_64 and aarch64.</span>
-                    <a href="https://github.com/polpo21/zero_layer/releases/latest" target="_blank" rel="noopener" data-i18n="rel_notice_link">Release notes</a> →
-                </span>
             </div>
         </div>
     </div>
@@ -738,28 +671,24 @@
         <div class="footer-grid">
             <div class="footer-about">
                 <a class="brand" href="#top" aria-label="Zero Layer">
-                    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <defs><linearGradient id="fg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c5bf0"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs>
-                        <rect width="32" height="32" rx="8" fill="url(#fg)"/>
-                        <path d="M10 11h10.5l-8.5 10h10.5" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                    </svg>
-                    Zero Layer
+                    <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7"/><path d="M9.5 10.5h12l-11 11h12"/></svg>
+                    <span>Zero Layer</span>
                 </a>
-                <p data-i18n="foot_about">A universal Linux package manager with native binary translation.</p>
+                <p data-i18n="foot_about">A universal Linux package manager with native binary translation. Install from any source, on any distribution, with zero runtime overhead.</p>
                 <div class="socials">
                     <a href="https://github.com/polpo21/zero_layer" target="_blank" rel="noopener" aria-label="GitHub">
-                        <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2 0-.4-.5-1.6.2-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2 0-.4-.5-1.6.2-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
                     </a>
                     <a href="https://www.instagram.com/costabilepaolo_" target="_blank" rel="noopener" aria-label="Instagram">
-                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5.2"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5.2"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"/></svg>
                     </a>
                     <a href="https://t.me/costabilepaolo" target="_blank" rel="noopener" aria-label="Telegram">
-                        <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.94 4.28a1.5 1.5 0 0 0-1.56-.23L3.4 10.87c-1.1.43-1.07 2 .05 2.38l4.3 1.43 1.64 5.16a1 1 0 0 0 1.63.43l2.4-2.18 4.35 3.2a1.5 1.5 0 0 0 2.36-.9l3.2-14.9a1.5 1.5 0 0 0-.44-1.4zM9.9 14.3l7.53-6.8-6.2 7.35a1 1 0 0 0-.24.55l-.28 2.2z"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.94 4.28a1.5 1.5 0 0 0-1.56-.23L3.4 10.87c-1.1.43-1.07 2 .05 2.38l4.3 1.43 1.64 5.16a1 1 0 0 0 1.63.43l2.4-2.18 4.35 3.2a1.5 1.5 0 0 0 2.36-.9l3.2-14.9a1.5 1.5 0 0 0-.44-1.4zM9.9 14.3l7.53-6.8-6.2 7.35a1 1 0 0 0-.24.55l-.28 2.2z"/></svg>
                     </a>
                 </div>
             </div>
 
-            <div class="footer-col">
+            <nav class="footer-col" aria-label="Project">
                 <h4 data-i18n="foot_c1">Project</h4>
                 <ul>
                     <li><a href="#how" data-i18n="nav_how">How it works</a></li>
@@ -767,9 +696,9 @@
                     <li><a href="#commands" data-i18n="nav_commands">Commands</a></li>
                     <li><a href="#architecture" data-i18n="nav_arch">Architecture</a></li>
                 </ul>
-            </div>
+            </nav>
 
-            <div class="footer-col">
+            <nav class="footer-col" aria-label="Resources">
                 <h4 data-i18n="foot_c2">Resources</h4>
                 <ul>
                     <li><a href="https://github.com/polpo21/zero_layer#readme" target="_blank" rel="noopener" data-i18n="foot_readme">Documentation</a></li>
@@ -777,9 +706,9 @@
                     <li><a href="https://github.com/polpo21/zero_layer/blob/main/docs/plugin-status.md" target="_blank" rel="noopener" data-i18n="foot_status">Plugin status</a></li>
                     <li><a href="https://github.com/polpo21/zero_layer/blob/main/LICENSE" target="_blank" rel="noopener" data-i18n="foot_license_l">Licence</a></li>
                 </ul>
-            </div>
+            </nav>
 
-            <div class="footer-col">
+            <nav class="footer-col" aria-label="Community">
                 <h4 data-i18n="foot_c3">Community</h4>
                 <ul>
                     <li><a href="https://github.com/polpo21/zero_layer" target="_blank" rel="noopener" data-i18n="foot_source">Source code</a></li>
@@ -787,7 +716,7 @@
                     <li><a href="https://github.com/polpo21/zero_layer/pulls" target="_blank" rel="noopener" data-i18n="foot_contribute">Contribute</a></li>
                     <li><a href="https://t.me/costabilepaolo" target="_blank" rel="noopener">Telegram</a></li>
                 </ul>
-            </div>
+            </nav>
         </div>
 
         <div class="footer-bottom">
@@ -797,7 +726,5 @@
     </div>
 </footer>
 
-<script src="assets/js/i18n.js"></script>
-<script src="assets/js/main.js"></script>
 </body>
 </html>
