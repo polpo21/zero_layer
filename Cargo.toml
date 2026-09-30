@@ -78,3 +78,10 @@ quick-xml = "0.42"
 
 # Plugin: DNF/Zypper (RPM cpio extraction)
 cpio = "0.4"
+
+# Release builds ship as a single downloadable binary, so trade build time for
+# size and speed: whole-program LTO, one codegen unit, and no debug symbols.
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
