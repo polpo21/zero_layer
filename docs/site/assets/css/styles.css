@@ -238,7 +238,9 @@ p { color: var(--text-2); }
     /* terminal block cursor */
     content: ""; display: inline-block; width: 0.42em; height: 0.78em; margin-left: 0.08em;
     background: var(--signal); vertical-align: -0.04em;
-    animation: blink 1.1s steps(1) infinite;
+    /* starts blinking once the page has settled: a blinking block during
+       load reads as "still changing" to Speed Index */
+    animation: blink 1.1s steps(1) 3s infinite;
 }
 @keyframes blink { 50% { opacity: 0; } }
 
