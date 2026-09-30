@@ -288,7 +288,7 @@ All translation happens at install time. Installed packages run with zero overhe
 
 ### Key design choices
 
-- **Single binary, pure Rust** — no C dependencies
+- **Single binary, no system libraries** — written in Rust; the few native pieces (zstd, liblzma, aws-lc for TLS) are compiled in, so nothing else needs installing
 - **Auto-detects everything** — arch, dynamic linker, libc, library paths, filesystem layout
 - **Works on any distro** — Arch, Ubuntu, Fedora, Alpine, NixOS, Void, Gentoo, Termux...
 - **Atomic transactions** — install fails = full rollback
