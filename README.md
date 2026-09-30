@@ -34,7 +34,7 @@ chmod +x ~/.local/bin/zl
 
 ### Build from source
 
-Requires Rust 1.85+.
+Requires Rust 1.90+.
 
 ```bash
 git clone https://github.com/polpo21/zero_layer.git

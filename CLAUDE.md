@@ -24,7 +24,7 @@ These rules are **mandatory** for every Claude instance working on this repo.
 **Zero Layer (ZL)** is a universal Linux package manager with native binary translation, written in Rust. It installs packages from any source (pacman, apt, AUR, GitHub releases) on any Linux system by translating them natively — no containers, VMs, or isolation layers. All translation happens at install time; installed packages run with zero overhead.
 
 **Binary name**: `zl`
-**Rust edition**: 2024 (requires Rust 1.85+)
+**Rust edition**: 2024 (requires Rust 1.90+, declared as `rust-version`)
 **License**: MIT
 
 ## Build Commands

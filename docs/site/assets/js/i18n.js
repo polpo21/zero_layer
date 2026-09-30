@@ -141,7 +141,7 @@ window.ZL_I18N = {
         s2_d: "Zero Layer symlinks the executables it installs into its own bin directory.",
         s3_t: "Install something",
         s3_d: "Leave off --from and Zero Layer will search every enabled source and let you pick.",
-        start_alt: "Prefer to build it yourself? Requires Rust 1.85 or newer.",
+        start_alt: "Prefer to build it yourself? Requires Rust 1.90 or newer.",
 
         faq_eyebrow: "FAQ",
         faq_title: "Reasonable questions",
@@ -310,7 +310,7 @@ window.ZL_I18N = {
         s2_d: "Zero Layer crea i symlink degli eseguibili che installa nella propria directory bin.",
         s3_t: "Installa qualcosa",
         s3_d: "Ometti --from e Zero Layer cercherà in tutte le sorgenti attive lasciandoti scegliere.",
-        start_alt: "Preferisci compilarlo da te? Serve Rust 1.85 o successivo.",
+        start_alt: "Preferisci compilarlo da te? Serve Rust 1.90 o successivo.",
 
         faq_eyebrow: "FAQ",
         faq_title: "Domande legittime",
@@ -479,7 +479,7 @@ window.ZL_I18N = {
         s2_d: "Zero Layer place des liens vers les exécutables qu'il installe dans son propre répertoire bin.",
         s3_t: "Installer quelque chose",
         s3_d: "Omettez --from et Zero Layer cherchera dans toutes les sources actives en vous laissant choisir.",
-        start_alt: "Vous préférez le compiler ? Rust 1.85 ou plus récent est requis.",
+        start_alt: "Vous préférez le compiler ? Rust 1.90 ou plus récent est requis.",
 
         faq_eyebrow: "FAQ",
         faq_title: "Questions légitimes",
@@ -648,7 +648,7 @@ window.ZL_I18N = {
         s2_d: "Zero Layer enlaza los ejecutables que instala en su propio directorio bin.",
         s3_t: "Instala algo",
         s3_d: "Omite --from y Zero Layer buscará en todas las fuentes activas para que elijas.",
-        start_alt: "¿Prefieres compilarlo tú? Necesitas Rust 1.85 o superior.",
+        start_alt: "¿Prefieres compilarlo tú? Necesitas Rust 1.90 o superior.",
 
         faq_eyebrow: "FAQ",
         faq_title: "Preguntas razonables",
@@ -817,7 +817,7 @@ window.ZL_I18N = {
         s2_d: "Zero Layer verlinkt die installierten ausführbaren Dateien in sein eigenes bin-Verzeichnis.",
         s3_t: "Etwas installieren",
         s3_d: "Lass --from weg, und Zero Layer durchsucht alle aktiven Quellen und lässt dich wählen.",
-        start_alt: "Lieber selbst bauen? Erfordert Rust 1.85 oder neuer.",
+        start_alt: "Lieber selbst bauen? Erfordert Rust 1.90 oder neuer.",
 
         faq_eyebrow: "FAQ",
         faq_title: "Berechtigte Fragen",

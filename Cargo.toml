@@ -2,6 +2,8 @@
 name = "zero_layer"
 version = "0.3.0"
 edition = "2024"
+# redb 4 is the newest requirement in the tree; checked with `cargo +1.90 check`
+rust-version = "1.90"
 license = "MIT"
 description = "Universal Linux package manager with native binary translation"
 
