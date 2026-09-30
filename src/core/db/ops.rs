@@ -146,7 +146,10 @@ impl ZlDatabase {
             let (k, v) = entry.map_err(|e: redb::StorageError| ZlError::Config(e.to_string()))?;
             if k.value().starts_with(&prefix) {
                 let node: PackageNode = serde_json::from_slice(v.value())?;
-                return Ok(Some(node));
+                // The prefix alone also matches "foo-bar-1.0" when asked for "foo"
+                if node.id.name == name {
+                    return Ok(Some(node));
+                }
             }
         }
         Ok(None)
@@ -740,5 +743,19 @@ mod tests {
 
         let none = db.get_all_versions("nonexistent").unwrap();
         assert!(none.is_empty());
+    }
+
+    #[test]
+    fn test_get_package_by_name_ignores_longer_names() {
+        let db = test_db();
+        db.put_package(&make_node("foo-bar", "1.0")).unwrap();
+
+        // "foo-" is a prefix of the key "foo-bar-1.0", but that is not "foo"
+        assert!(db.get_package_by_name("foo").unwrap().is_none());
+
+        db.put_package(&make_node("foo", "2.0")).unwrap();
+        let got = db.get_package_by_name("foo").unwrap().unwrap();
+        assert_eq!(got.id.name, "foo");
+        assert_eq!(got.id.version, "2.0");
     }
 }
