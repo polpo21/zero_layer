@@ -33,7 +33,7 @@ These rules are **mandatory** for every Claude instance working on this repo.
 cargo build                  # Debug build
 cargo build --release        # Release build
 cargo run -- <subcommand>    # Run (e.g., cargo run -- install firefox)
-cargo test                   # Run all tests (349 tests: 190 bin + 159 lib)
+cargo test                   # Run all tests (357 tests: 196 bin + 161 lib)
 cargo test <name>            # Run a single test by name
 cargo test -- --nocapture    # Run tests with stdout visible
 cargo clippy                 # Lint
@@ -102,7 +102,7 @@ There are no integration tests — all tests are unit tests inside `#[cfg(test)]
 3. Detect `SystemProfile` and apply config overrides
 4. Create `ZlPaths`, ensure directory structure exists
 5. Open `ZlDatabase` (redb)
-6. Register all plugins: pacman → aur → apt → github (order = priority)
+6. Register all 13 plugins, filtered by the `sources` whitelist: pacman → aur → apt → dnf → zypper → apk → xbps → portage → nix → flatpak → snap → appimage → github (order = priority)
 7. Dispatch to command handler
 
 ### Key abstractions
@@ -111,11 +111,15 @@ There are no integration tests — all tests are unit tests inside `#[cfg(test)]
 - **`SourcePlugin` trait** (`plugin/mod.rs`): Interface every package source implements — `name()`, `search()`, `resolve()`, `download()`, `extract()`, `sync()`. Plugins are compile-time modules with trait objects, not dynamic libraries.
 - **`Transaction`** (`core/transaction.rs`): Atomic install — tracks files/dirs/symlinks/DB entries created during install, rolls back everything on failure.
 - **`DepGraph`** (`core/graph/model.rs`): petgraph-based dependency graph with topological sort, cycle detection, orphan detection.
-- **`ZlDatabase`** (`core/db/ops.rs`): redb-based persistent store. Tables: PACKAGES, FILE_OWNERS, LIB_INDEX, DEPENDENCIES, PINNED, PLUGIN_METADATA, HISTORY. Since the redb 4 upgrade a `zl.redb` written by ZL <= 0.2.0 (redb file format v2) cannot be opened; `open()` maps `DatabaseError::UpgradeRequired` to a message telling the user to delete the file and reinstall.
+- **`ZlDatabase`** (`core/db/ops.rs`): redb-based persistent store. Tables: PACKAGES, FILE_OWNERS, LIB_INDEX, DEPENDENCIES, PINNED, PLUGIN_METADATA, HISTORY. Packages are keyed `name-version`; when you hold such a key (history entries, dependency records, transactions) look it up with `get_package_by_key()` — never split it on the last `-`, since names and versions can both contain hyphens. HISTORY keys are the zero-padded timestamp plus a `-NNNNNN` suffix for events in the same second. Since the redb 4 upgrade a `zl.redb` written by ZL <= 0.2.0 (redb file format v2) cannot be opened; `open()` maps `DatabaseError::UpgradeRequired` to a message telling the user to delete the file and reinstall.
 - **`PathMapping`** (`core/path/mod.rs`): Dynamic FHS-to-ZL path translation using SystemProfile.
 - **`PackageCandidate` / `ExtractedPackage`** (`plugin/mod.rs`): Common types shared across all plugins for package metadata and extracted content.
 - **`PluginInfo`** (`plugin/mod.rs`): Plugin metadata for the remote plugin registry.
 - **`HistoryEntry`** (`core/db/ops.rs`): Tracks install/remove/upgrade/rollback events with timestamps.
+
+### Self-update (`cli/selfupdate.rs`)
+
+`zl self-update` downloads the release asset for the **running binary's own target** (arch + `gnu`/`musl`, fixed at compile time), verifies it against the release's `SHA256SUMS.txt` (refusing on a missing entry or mismatch), and only updates when the release is newer. The four published targets are the ones built by `release.yml`; keep `release_target()` in sync with that matrix.
 
 ### Plugin system
 
@@ -174,12 +178,13 @@ Each CLI command lives in `src/cli/<command>.rs` with a `pub fn handle(...)` fun
 - `ZlError` enum in `error.rs` (thiserror, boxed where needed to keep size small) for domain errors with `.suggestion()` hints
 - Plugin-specific error suggestions: pacman mirror issues, APT repo failures, GitHub rate limits, AUR build failures (base-devel, PGP keys), architecture mismatches, self-update permissions
 - `anyhow::Result` at the top level (`run()` returns `anyhow::Result<()>`)
-- `retry_with_backoff()` in `error.rs` for HTTP retries (3 attempts: 1s, 2s, 4s)
+- `retry_with_backoff()` in `error.rs` for HTTP retries (3 attempts, waiting 1s then 2s between them)
 - Tracing: default level `warn`; `-v` = info, `-vv` = debug
 
 ### Key design constraints
 
-- **Single binary, zero C deps**: redb over SQLite, elb over patchelf, no tokio (thread::scope for parallelism), rustls over OpenSSL (reqwest 0.13's default — `openssl-sys` is not in the dependency tree)
+- **Single binary, no system C libraries**: redb over SQLite, elb over patchelf, no tokio (thread::scope for parallelism), rustls over OpenSSL (reqwest 0.13's default — `openssl-sys` is not in the dependency tree). Some C code *is* compiled in and statically linked: `aws-lc-sys` (rustls' crypto provider), `zstd-sys` and `lzma-sys` (xz2). `bzip2` 0.6 uses the pure-Rust `libbz2-rs-sys` and `flate2` uses `zlib-rs`. Do not claim "zero C code".
+- **Optimized release profile**: `lto = true`, `codegen-units = 1`, `strip = true` (≈11 MB instead of ≈16 MB; only release builds on tags pay the longer link)
 - **Dynamic detection over hardcoded paths**: interpreter from /bin/sh's PT_INTERP, lib dirs from ldconfig + ld.so.conf
 - **RUNPATH over RPATH**: modern standard, respects LD_LIBRARY_PATH
 - **Atomic transactions**: every install is wrapped; failure = full rollback
@@ -222,7 +227,7 @@ Each CLI command lives in `src/cli/<command>.rs` with a `pub fn handle(...)` fun
 
 - **Zero clippy warnings**: `cargo clippy -- -D warnings` passes clean
 - **Zero `cargo fmt` diff**: all code is formatted
-- **349 tests**: comprehensive coverage of core modules (conflicts, ELF, path mapping, DB, graph, transaction, verify, plugins, search scoring, system detection, cache dedup, run, doctor, size, history, why, RPM repodata + repomd, NAR, source filtering)
+- **357 tests**: comprehensive coverage of core modules (conflicts, ELF, path mapping, DB, graph, transaction, verify, plugins, search scoring, system detection, cache dedup, run, doctor, size, history, why, RPM repodata + repomd, NAR, source filtering)
 
 ### Naming conventions
 
@@ -302,5 +307,5 @@ linux, package-manager, rust, elf, binary-translation, cli, apt, pacman, aur, dn
 gh repo edit --description "Universal Linux package manager with native binary translation. Install packages from any source (pacman, apt, AUR, GitHub releases) on any Linux system — no containers, no VMs, zero runtime overhead. Written in Rust."
 
 # Set topics (replaces all topics)
-gh repo edit --add-topic linux --add-topic package-manager --add-topic rust --add-topic elf --add-topic binary-translation --add-topic cli --add-topic apt --add-topic pacman --add-topic aur --add-topic cross-distribution --add-topic dependency-management
+gh repo edit --add-topic linux --add-topic package-manager --add-topic rust --add-topic elf --add-topic binary-translation --add-topic cli --add-topic apt --add-topic pacman --add-topic aur --add-topic dnf --add-topic nix --add-topic flatpak --add-topic cross-distribution --add-topic dependency-management
 ```

@@ -11,8 +11,8 @@
 //! Usage:  zl install curl --from xbps
 //!         zl search nginx --from xbps
 //!
-//! XBPS repodata is a plist (property list) file compressed with zstd.
-//! For simplicity we parse the repodata index as a simple key-value format.
+//! XBPS repodata is a zstd-compressed tar holding `index.plist`, an XML
+//! property list parsed with quick-xml (see `parse_index_plist`).
 
 use std::io::Read;
 use std::path::{Path, PathBuf};
