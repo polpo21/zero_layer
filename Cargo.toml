@@ -36,7 +36,7 @@ reqwest = { version = "0.13", features = ["blocking", "json"] }
 
 # Compression/archive
 tar = "0.4"
-zstd = "0.13"
+zstd = "0.14"
 flate2 = "1"
 
 # Error handling
@@ -58,7 +58,7 @@ sha2 = "0.11"
 # Filesystem utilities
 walkdir = "2"
 tempfile = "3"
-dirs = "6"
+dirs = "7"
 
 # System detection
 libc = "0.2"
