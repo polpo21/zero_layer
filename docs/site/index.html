@@ -68,9 +68,8 @@
 }
 </script>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&amp;family=Geist:wght@400..600&amp;family=Geist+Mono:wght@400..600&amp;display=swap">
+<link rel="preload" href="assets/fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/styles.css">
 <script src="assets/js/i18n.js" defer></script>
 <script src="assets/js/main.js" defer></script>
@@ -200,7 +199,7 @@
             <p class="sec-lede" data-i18n="why_lede">Every distribution ships its own format, its own repository and its own idea of where files belong. The software you want is often packaged — just not for your system.</p>
         </header>
 
-        <div class="pains reveal">
+        <div class="pains stagger">
             <article class="pain">
                 <span class="index" aria-hidden="true">01</span>
                 <h3 data-i18n="p1_t">The package exists, but not for you</h3>
@@ -242,8 +241,8 @@
             <div class="elf-panel elf-before">
                 <p class="elf-label"><span class="elf-sign" aria-hidden="true">−</span><span data-i18n="idea_before">built for Arch</span></p>
                 <dl>
-                    <div><dt>PT_INTERP</dt><dd>/usr/lib/ld-linux-x86-64.so.2</dd></div>
-                    <div><dt>RUNPATH</dt><dd>—</dd></div>
+                    <div class="chg"><dt>PT_INTERP</dt><dd>/usr/lib/ld-linux-x86-64.so.2</dd></div>
+                    <div class="chg"><dt>RUNPATH</dt><dd>—</dd></div>
                     <div><dt>NEEDED</dt><dd>libpcre2-8.so.0 · libc.so.6</dd></div>
                 </dl>
             </div>
@@ -251,8 +250,8 @@
             <div class="elf-panel elf-after">
                 <p class="elf-label"><span class="elf-sign" aria-hidden="true">+</span><span data-i18n="idea_after">patched for this machine</span></p>
                 <dl>
-                    <div><dt>PT_INTERP</dt><dd>/lib64/ld-linux-x86-64.so.2</dd></div>
-                    <div><dt>RUNPATH</dt><dd>$ORIGIN/../lib:~/.local/share/zl/lib</dd></div>
+                    <div class="chg"><dt>PT_INTERP</dt><dd>/lib64/ld-linux-x86-64.so.2</dd></div>
+                    <div class="chg"><dt>RUNPATH</dt><dd>$ORIGIN/../lib:~/.local/share/zl/lib</dd></div>
                     <div><dt>NEEDED</dt><dd>libpcre2-8.so.0 · libc.so.6</dd></div>
                 </dl>
             </div>
@@ -270,7 +269,7 @@
             <p class="sec-lede" data-i18n="phil_lede">Zero Layer is opinionated. These are the rules the codebase is held to.</p>
         </header>
 
-        <div class="cells reveal">
+        <div class="cells stagger">
             <article class="cell"><span class="index" aria-hidden="true">/01</span><h3 data-i18n="ph1_t">Zero overhead after install</h3><p data-i18n="ph1_d">All translation work happens once, during installation. Nothing sits between your program and the kernel afterwards.</p></article>
             <article class="cell"><span class="index" aria-hidden="true">/02</span><h3 data-i18n="ph2_t">Detect, never assume</h3><p data-i18n="ph2_d">Architecture, dynamic linker, libc, library directories and filesystem layout are all probed from the running system instead of hardcoded.</p></article>
             <article class="cell"><span class="index" aria-hidden="true">/03</span><h3 data-i18n="ph3_t">Atomic or nothing</h3><p data-i18n="ph3_d">Every install runs inside a transaction that records what it touched. A failure anywhere unwinds the whole operation.</p></article>
@@ -290,7 +289,7 @@
             <p class="sec-lede" data-i18n="how_lede">Eight stages run between your command and a working binary. Each one is observable with -v, and any failure rolls the whole thing back.</p>
         </header>
 
-        <ol class="pipeline reveal">
+        <ol class="pipeline stagger">
             <li class="pstep"><span class="pstep-n" aria-hidden="true">01</span><h3 data-i18n="h1_t">Resolve</h3><p data-i18n="h1_d">Finds the package and walks its dependency tree recursively, detecting cycles. If a dependency is missing from the primary source, every other enabled source is queried and you choose.</p><span class="chip" data-i18n="h1_m">cross-source resolution</span></li>
             <li class="pstep"><span class="pstep-n" aria-hidden="true">02</span><h3 data-i18n="h2_t">Check conflicts</h3><p data-i18n="h2_d">Five classes are checked before anything is written: file ownership, binary names, library sonames, declared conflicts and version constraints.</p><span class="chip" data-i18n="h2_m">5 conflict types</span></li>
             <li class="pstep"><span class="pstep-n" aria-hidden="true">03</span><h3 data-i18n="h3_t">Download</h3><p data-i18n="h3_d">Packages are fetched straight from their native repositories over four parallel threads, with progress bars and automatic retry with backoff.</p><span class="chip" data-i18n="h3_m">4 threads · retry</span></li>
@@ -312,7 +311,7 @@
             <p class="sec-lede" data-i18n="feat_lede">Everything you would expect from your distro's tooling, plus the things it never had.</p>
         </header>
 
-        <div class="bento reveal">
+        <div class="bento stagger">
             <article class="tile tile-wide tile-accent">
                 <h3 data-i18n="f1_t">Native binary translation</h3>
                 <p data-i18n="f1_d">ELF binaries are analysed with goblin and patched with elb at install time. The dynamic linker and RUNPATH are rewritten to match your system, so packages run at full native speed afterwards.</p>
@@ -352,7 +351,7 @@
             <p class="sec-lede" data-i18n="src_lede">Each source is a plugin implementing the same trait. Enable the ones you want per machine, or filter per command with --from.</p>
         </header>
 
-        <ul class="sources reveal">
+        <ul class="sources stagger">
             <li><code>pacman</code><span>Arch Linux</span></li>
             <li><code>aur</code><span>Arch User Repository</span></li>
             <li><code>apt</code><span>Debian · Ubuntu</span></li>
@@ -630,7 +629,7 @@
             <h2 data-i18n="faq_title">Reasonable questions</h2>
         </header>
 
-        <div class="faq reveal">
+        <div class="faq stagger">
             <details><summary data-i18n="q1">Does this replace my distro's package manager?</summary><div class="faq-body" data-i18n="a1">No, and it does not try to. Zero Layer installs into your home directory and never touches system paths, so pacman, apt or dnf keep managing the base system exactly as before. Use it for the software your distro does not package.</div></details>
             <details><summary data-i18n="q2">Do I need root?</summary><div class="faq-body" data-i18n="a2">No. The default installation lives entirely under <code>~/.local/share/zl</code>. Root is only relevant if you choose to put the <code>zl</code> binary itself in <code>/usr/local/bin</code>, and even that is optional.</div></details>
             <details><summary data-i18n="q3">Is it really zero overhead?</summary><div class="faq-body" data-i18n="a3">Yes, because after installation there is nothing left running. The patched binary is ordinary machine code executed directly by the kernel — no sandbox, no supervisor, no translation at run time. The work happens once, while installing.</div></details>
@@ -689,7 +688,7 @@
             </div>
 
             <nav class="footer-col" aria-label="Project">
-                <h4 data-i18n="foot_c1">Project</h4>
+                <h2 class="footer-h" data-i18n="foot_c1">Project</h2>
                 <ul>
                     <li><a href="#how" data-i18n="nav_how">How it works</a></li>
                     <li><a href="#sources" data-i18n="nav_sources">Sources</a></li>
@@ -699,7 +698,7 @@
             </nav>
 
             <nav class="footer-col" aria-label="Resources">
-                <h4 data-i18n="foot_c2">Resources</h4>
+                <h2 class="footer-h" data-i18n="foot_c2">Resources</h2>
                 <ul>
                     <li><a href="https://github.com/polpo21/zero_layer#readme" target="_blank" rel="noopener" data-i18n="foot_readme">Documentation</a></li>
                     <li><a href="https://github.com/polpo21/zero_layer/releases" target="_blank" rel="noopener" data-i18n="foot_releases">Releases</a></li>
@@ -709,7 +708,7 @@
             </nav>
 
             <nav class="footer-col" aria-label="Community">
-                <h4 data-i18n="foot_c3">Community</h4>
+                <h2 class="footer-h" data-i18n="foot_c3">Community</h2>
                 <ul>
                     <li><a href="https://github.com/polpo21/zero_layer" target="_blank" rel="noopener" data-i18n="foot_source">Source code</a></li>
                     <li><a href="https://github.com/polpo21/zero_layer/issues" target="_blank" rel="noopener" data-i18n="foot_issues">Report an issue</a></li>

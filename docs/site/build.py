@@ -17,7 +17,9 @@ URL, so this script writes real pages instead:
 Standard library only: it runs as-is on the GitHub Pages runner.
 """
 
+import base64
 import datetime
+import hashlib
 import html
 import json
 import pathlib
@@ -30,6 +32,56 @@ BASE_URL = "https://polpo21.github.io/zero_layer/"
 LANGS = ["en", "it", "fr", "es", "de"]
 LOCALES = {"en": "en_US", "it": "it_IT", "fr": "fr_FR", "es": "es_ES", "de": "de_DE"}
 VERSION_RE = re.compile(r"<strong>v(\d+\.\d+\.\d+)</strong>")
+
+
+def minify_css(css):
+    """Whitespace/comment minifier; safe for this stylesheet (no quoted
+    strings contain the characters it touches beyond single spaces)."""
+    css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+    css = re.sub(r"\s+", " ", css)
+    css = re.sub(r"\s*([{};,>])\s*", r"\1", css)
+    css = re.sub(r":\s+", ":", css)
+    css = css.replace(";}", "}")
+    return css.strip()
+
+
+def minify_js(js):
+    """Conservative minifier: drops comment-only lines and indentation.
+    Never touches the inside of a line, so strings and regexes are safe."""
+    js = re.sub(r"^\s*/\*.*?\*/\s*$", "", js, flags=re.S | re.M)
+    out = []
+    for line in js.splitlines():
+        line = line.strip()
+        if not line or line.startswith("//"):
+            continue
+        out.append(line)
+    return "\n".join(out) + "\n"
+
+
+def csp_hash(source):
+    digest = hashlib.sha256(source.encode("utf-8")).digest()
+    return "'sha256-" + base64.b64encode(digest).decode() + "'"
+
+
+def content_security_policy(doc):
+    """A strict CSP for the rendered page: every inline <script> and <style>
+    is allowed by hash, nothing inline is allowed by default, and DOM sinks
+    require Trusted Types (the runtime never assigns HTML strings)."""
+    scripts = [m.group(1) for m in re.finditer(r"<script>(.*?)</script>", doc, re.S)]
+    styles = [m.group(1) for m in re.finditer(r"<style>(.*?)</style>", doc, re.S)]
+    return "; ".join([
+        "default-src 'self'",
+        "script-src 'self' " + " ".join(csp_hash(x) for x in scripts),
+        "style-src 'self' " + " ".join(csp_hash(x) for x in styles),
+        "img-src 'self' data:",
+        "font-src 'self'",
+        "connect-src 'self'",
+        "object-src 'none'",
+        "base-uri 'none'",
+        "form-action 'none'",
+        "require-trusted-types-for 'script'",
+        "upgrade-insecure-requests",
+    ])
 
 
 def page_url(lang):
@@ -158,7 +210,7 @@ def json_ld(lang, strings, version):
     return json.dumps(graph, ensure_ascii=False, indent=2)
 
 
-def render(template, lang, dicts):
+def render(template, lang, dicts, css):
     strings, fallback = dicts[lang], dicts["en"]
     merged = {**fallback, **strings}
     doc = apply_text(template, merged, fallback)
@@ -183,8 +235,21 @@ def render(template, lang, dicts):
     root = "" if lang == "en" else "../"
     marker = f'<meta name="zl-page-lang" content="{lang}">\n<meta name="zl-root" content="{root}">\n'
     doc = doc.replace('<meta charset="UTF-8">\n', '<meta charset="UTF-8">\n' + marker, 1)
+
+    # Inline the stylesheet: one render-blocking request fewer.
+    inline_css = css.replace("url(../fonts/", f"url({root}assets/fonts/")
+    doc = doc.replace('<link rel="stylesheet" href="assets/css/styles.css">', f"<style>{inline_css}</style>", 1)
+    # The text is already translated; ship only the strings used at runtime.
+    runtime = {lang: {k: merged[k] for k in ("copy", "copied")}}
+    doc = doc.replace(
+        '<script src="assets/js/i18n.js" defer></script>',
+        "<script>window.ZL_I18N=" + json.dumps(runtime, ensure_ascii=False) + ";</script>", 1,
+    )
     if root:
         doc = re.sub(r'((?:href|src)=")(assets/|favicon\.svg)', rf"\g<1>{root}\g<2>", doc)
+
+    csp = f'<meta http-equiv="Content-Security-Policy" content="{content_security_policy(doc)}">\n'
+    doc = doc.replace('<meta charset="UTF-8">\n', '<meta charset="UTF-8">\n' + csp, 1)
     return doc, version
 
 
@@ -210,11 +275,14 @@ def build(out):
     if out.exists():
         shutil.rmtree(out)
     out.mkdir(parents=True)
-    shutil.copytree(SITE / "assets", out / "assets", ignore=shutil.ignore_patterns("og-image.src.html"))
+    shutil.copytree(SITE / "assets", out / "assets", ignore=shutil.ignore_patterns("og-image.src.html", "i18n.js", "css"))
+    main_js = out / "assets/js/main.js"
+    main_js.write_text(minify_js(main_js.read_text(encoding="utf-8")), encoding="utf-8")
+    css = minify_css((SITE / "assets/css/styles.css").read_text(encoding="utf-8"))
     for name in ["og-image.png", "favicon.svg", "robots.txt"]:
         shutil.copy2(SITE / name, out / name)
     for lang in LANGS:
-        doc, version = render(template, lang, dicts)
+        doc, version = render(template, lang, dicts, css)
         target = out / "index.html" if lang == "en" else out / lang / "index.html"
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(doc, encoding="utf-8")
