@@ -155,7 +155,7 @@ fn parse_index_plist(plist: &[u8], repo: &str, arch: &str) -> Result<Vec<XbpsEnt
             Ok(Event::Eof) => break,
             Ok(Event::Start(e)) => {
                 match e.name().as_ref() {
-                    b"dict" => {
+                    "dict" => {
                         depth += 1;
                         if depth == 2 {
                             // Entering a package's metadata; `key` holds its name
@@ -163,34 +163,27 @@ fn parse_index_plist(plist: &[u8], repo: &str, arch: &str) -> Result<Vec<XbpsEnt
                             pkgver.clear();
                         }
                     }
-                    b"array" => in_array = true,
-                    b"key" => text.clear(),
-                    b"string" | b"integer" => text.clear(),
+                    "array" => in_array = true,
+                    "key" => text.clear(),
+                    "string" | "integer" => text.clear(),
                     _ => {}
                 }
             }
             Ok(Event::Text(e)) => {
-                text.push_str(&e.xml10_content().unwrap_or_default());
+                text.push_str(&e.xml10_content());
             }
             Ok(Event::GeneralRef(e)) => {
                 // Maintainer names carry &lt;mail&gt;, dependencies carry &gt;=
                 if let Ok(Some(c)) = e.resolve_char_ref() {
                     text.push(c);
-                } else if let Ok(name) = e.decode() {
-                    match name.as_ref() {
-                        "amp" => text.push('&'),
-                        "lt" => text.push('<'),
-                        "gt" => text.push('>'),
-                        "quot" => text.push('"'),
-                        "apos" => text.push('\''),
-                        _ => {}
-                    }
+                } else if let Some(s) = quick_xml::escape::resolve_xml_entity(&e) {
+                    text.push_str(s);
                 }
             }
             Ok(Event::End(e)) => match e.name().as_ref() {
-                b"key" => key = text.trim().to_string(),
-                b"array" => in_array = false,
-                b"string" | b"integer" => {
+                "key" => key = text.trim().to_string(),
+                "array" => in_array = false,
+                "string" | "integer" => {
                     if key == "pkgver" {
                         pkgver = text.trim().to_string();
                     }
@@ -199,7 +192,7 @@ fn parse_index_plist(plist: &[u8], repo: &str, arch: &str) -> Result<Vec<XbpsEnt
                     }
                     text.clear();
                 }
-                b"dict" => {
+                "dict" => {
                     if depth == 2
                         && let Some(mut entry) = current.take()
                         && !entry.name.is_empty()

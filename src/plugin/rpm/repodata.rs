@@ -74,7 +74,7 @@ pub fn parse_primary_xml<R: Read>(reader: R) -> ZlResult<Vec<RpmEntry>> {
             Ok(Event::Start(e)) => {
                 let name_ref = e.name();
                 let local = local_name(name_ref.as_ref());
-                match local.as_str() {
+                match local {
                     "package" => {
                         in_package = true;
                         current = RpmEntry {
@@ -93,7 +93,7 @@ pub fn parse_primary_xml<R: Read>(reader: R) -> ZlResult<Vec<RpmEntry>> {
                         };
                     }
                     "name" | "summary" | "description" | "arch" if in_package => {
-                        current_tag = local;
+                        current_tag = local.to_string();
                         text_buf.clear();
                     }
                     "checksum" if in_package => {
@@ -102,8 +102,8 @@ pub fn parse_primary_xml<R: Read>(reader: R) -> ZlResult<Vec<RpmEntry>> {
                         // Check if type="sha256"
                         checksum_is_sha256 = false;
                         for attr in e.attributes().flatten() {
-                            if attr.key.as_ref() == b"type" {
-                                let val = String::from_utf8_lossy(&attr.value);
+                            if attr.key.as_ref() == "type" {
+                                let val = attr.value;
                                 if val == "sha256" {
                                     checksum_is_sha256 = true;
                                 }
@@ -131,17 +131,15 @@ pub fn parse_primary_xml<R: Read>(reader: R) -> ZlResult<Vec<RpmEntry>> {
                 }
                 let name_ref = e.name();
                 let local = local_name(name_ref.as_ref());
-                match local.as_str() {
+                match local {
                     "version" => {
                         for attr in e.attributes().flatten() {
                             match attr.key.as_ref() {
-                                b"ver" => {
-                                    current.version =
-                                        String::from_utf8_lossy(&attr.value).to_string();
+                                "ver" => {
+                                    current.version = attr.value.to_string();
                                 }
-                                b"rel" => {
-                                    current.release =
-                                        String::from_utf8_lossy(&attr.value).to_string();
+                                "rel" => {
+                                    current.release = attr.value.to_string();
                                 }
                                 _ => {}
                             }
@@ -149,25 +147,23 @@ pub fn parse_primary_xml<R: Read>(reader: R) -> ZlResult<Vec<RpmEntry>> {
                     }
                     "location" => {
                         for attr in e.attributes().flatten() {
-                            if attr.key.as_ref() == b"href" {
-                                current.location_href =
-                                    String::from_utf8_lossy(&attr.value).to_string();
+                            if attr.key.as_ref() == "href" {
+                                current.location_href = attr.value.to_string();
                             }
                         }
                     }
                     "size" => {
                         for attr in e.attributes().flatten() {
-                            if attr.key.as_ref() == b"installed" {
-                                current.installed_size =
-                                    String::from_utf8_lossy(&attr.value).parse().unwrap_or(0);
+                            if attr.key.as_ref() == "installed" {
+                                current.installed_size = attr.value.parse().unwrap_or(0);
                             }
                         }
                     }
                     "rpm:entry" | "entry" => {
                         let mut dep_name = String::new();
                         for attr in e.attributes().flatten() {
-                            if attr.key.as_ref() == b"name" {
-                                dep_name = String::from_utf8_lossy(&attr.value).to_string();
+                            if attr.key.as_ref() == "name" {
+                                dep_name = attr.value.to_string();
                             }
                         }
                         if !dep_name.is_empty() && !dep_name.starts_with("rpmlib(") {
@@ -187,7 +183,7 @@ pub fn parse_primary_xml<R: Read>(reader: R) -> ZlResult<Vec<RpmEntry>> {
                 if !in_package || current_tag.is_empty() {
                     continue;
                 }
-                text_buf.push_str(&e.xml10_content().unwrap_or_default());
+                text_buf.push_str(&e.xml10_content());
             }
             Ok(Event::GeneralRef(e)) => {
                 if !in_package || current_tag.is_empty() {
@@ -198,15 +194,8 @@ pub fn parse_primary_xml<R: Read>(reader: R) -> ZlResult<Vec<RpmEntry>> {
                 match e.resolve_char_ref() {
                     Ok(Some(c)) => text_buf.push(c),
                     _ => {
-                        if let Ok(name) = e.decode() {
-                            match name.as_ref() {
-                                "amp" => text_buf.push('&'),
-                                "lt" => text_buf.push('<'),
-                                "gt" => text_buf.push('>'),
-                                "quot" => text_buf.push('"'),
-                                "apos" => text_buf.push('\''),
-                                _ => {}
-                            }
+                        if let Some(s) = quick_xml::escape::resolve_xml_entity(&e) {
+                            text_buf.push_str(s);
                         }
                     }
                 }
@@ -227,7 +216,7 @@ pub fn parse_primary_xml<R: Read>(reader: R) -> ZlResult<Vec<RpmEntry>> {
                     }
                 }
 
-                match local.as_str() {
+                match local {
                     "package" if in_package => {
                         // Use summary as description if description is empty
                         if current.description.is_empty() {
@@ -259,9 +248,9 @@ pub fn parse_primary_xml<R: Read>(reader: R) -> ZlResult<Vec<RpmEntry>> {
 }
 
 /// Strip namespace prefix from an XML tag name (e.g., "common:name" → "name")
-fn local_name(full: &[u8]) -> String {
-    let s = std::str::from_utf8(full).unwrap_or("");
-    s.rsplit(':').next().unwrap_or(s).to_string()
+/// Strip the namespace prefix from an element name (`rpm:entry` -> `entry`).
+pub(super) fn local_name(full: &str) -> &str {
+    full.rsplit(':').next().unwrap_or(full)
 }
 
 #[cfg(test)]

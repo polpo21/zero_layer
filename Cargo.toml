@@ -74,7 +74,7 @@ zip = "8"
 xz2 = "0.1"
 
 # Plugin: DNF/Zypper (RPM repodata XML parsing)
-quick-xml = "0.41"
+quick-xml = "0.42"
 
 # Plugin: DNF/Zypper (RPM cpio extraction)
 cpio = "0.4"

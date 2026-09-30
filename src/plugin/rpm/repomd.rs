@@ -23,6 +23,7 @@ pub struct RepoMdData {
 
 /// Parse repomd.xml into its list of data entries.
 pub fn parse_repomd<R: Read>(reader: R) -> ZlResult<Vec<RepoMdData>> {
+    use super::repodata::local_name;
     use quick_xml::events::Event;
     use quick_xml::reader::Reader;
     use std::io::BufReader;
@@ -37,7 +38,7 @@ pub fn parse_repomd<R: Read>(reader: R) -> ZlResult<Vec<RepoMdData>> {
         match xml.read_event_into(&mut buf) {
             Ok(Event::Eof) => break,
             Ok(Event::Start(e)) if local_name(e.name().as_ref()) == "data" => {
-                current_type = attr_value(&e, b"type");
+                current_type = attr_value(&e, "type");
             }
             Ok(Event::End(e)) if local_name(e.name().as_ref()) == "data" => {
                 current_type = None;
@@ -46,7 +47,7 @@ pub fn parse_repomd<R: Read>(reader: R) -> ZlResult<Vec<RepoMdData>> {
             Ok(Event::Empty(e)) | Ok(Event::Start(e))
                 if local_name(e.name().as_ref()) == "location" =>
             {
-                if let (Some(data_type), Some(href)) = (&current_type, attr_value(&e, b"href")) {
+                if let (Some(data_type), Some(href)) = (&current_type, attr_value(&e, "href")) {
                     entries.push(RepoMdData {
                         data_type: data_type.clone(),
                         location_href: href,
@@ -99,16 +100,11 @@ pub fn parse_primary_by_href(
     }
 }
 
-fn local_name(full: &[u8]) -> String {
-    let s = std::str::from_utf8(full).unwrap_or("");
-    s.rsplit(':').next().unwrap_or(s).to_string()
-}
-
-fn attr_value(e: &quick_xml::events::BytesStart, key: &[u8]) -> Option<String> {
+fn attr_value(e: &quick_xml::events::BytesStart, key: &str) -> Option<String> {
     e.attributes()
         .flatten()
         .find(|a| a.key.as_ref() == key)
-        .map(|a| String::from_utf8_lossy(&a.value).to_string())
+        .map(|a| a.value.to_string())
 }
 
 #[cfg(test)]
