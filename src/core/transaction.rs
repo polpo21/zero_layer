@@ -266,7 +266,8 @@ mod tests {
         };
         // A hyphenated version must not be split into name "testpkg-1.0"
         db.put_package(&node).unwrap();
-        db.register_file("/zl/bin/testpkg", "testpkg-1.0-2").unwrap();
+        db.register_file("/zl/bin/testpkg", "testpkg-1.0-2")
+            .unwrap();
         db.register_dependency("testpkg-1.0-2", "glibc").unwrap();
 
         // Verify the entries exist
