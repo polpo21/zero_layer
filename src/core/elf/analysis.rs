@@ -78,7 +78,11 @@ pub fn analyze(path: &Path) -> ZlResult<ElfInfo> {
             // like a shared library, so it is told apart by DF_1_PIE — the same
             // flag file(1) uses to print "pie executable". musl release builds,
             // which pick_best_asset prefers, are typically static-pie.
-            if elf.interpreter.is_some() || is_pie(&elf) {
+            //
+            // A PT_INTERP alone is not enough: some libraries are runnable
+            // too (glibc's libc.so.6 has a PT_INTERP and prints its version), so an object
+            // with a SONAME and no DF_1_PIE stays a shared library.
+            if is_pie(&elf) || (elf.interpreter.is_some() && elf.soname.is_none()) {
                 ElfType::Executable
             } else {
                 ElfType::SharedLibrary
