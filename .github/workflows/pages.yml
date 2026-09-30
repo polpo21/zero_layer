@@ -33,7 +33,9 @@ jobs:
       # One static page per language (/, /it/, /fr/, /es/, /de/) plus the
       # sitemap; see docs/site/build.py.
       - name: Build site
-        run: python3 docs/site/build.py _site
+        run: |
+          python3 -m pip install --quiet fonttools brotli
+          python3 docs/site/build.py _site
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5

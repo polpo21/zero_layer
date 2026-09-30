@@ -14,7 +14,10 @@ URL, so this script writes real pages instead:
     python3 build.py --sync    refill the English text inside index.html
                                from i18n.js, so the source never drifts
 
-Standard library only: it runs as-is on the GitHub Pages runner.
+Standard library only, except for one optional step: when fontTools is
+installed (the Pages workflow installs it), the web fonts are subset to the
+characters the rendered pages actually use, which trims about a third of
+their weight. Without it the full latin subsets are published unchanged.
 """
 
 import base64
@@ -248,6 +251,14 @@ def render(template, lang, dicts, css):
     if root:
         doc = re.sub(r'((?:href|src)=")(assets/|favicon\.svg)', rf"\g<1>{root}\g<2>", doc)
 
+    # Byte order for the first round trip: the stylesheet right after <title>,
+    # structured data (not needed to paint) at the end of <body>.
+    style = re.search(r"<style>.*?</style>", doc, re.S).group(0)
+    doc = doc.replace(style, "", 1)
+    doc = re.sub(r"(</title>\n)", lambda m: m.group(1) + style + "\n", doc, count=1)
+    ld = re.search(r'<script type="application/ld\+json">.*?</script>\n?', doc, re.S).group(0)
+    doc = doc.replace(ld, "", 1).replace("</body>", ld + "</body>", 1)
+
     csp = f'<meta http-equiv="Content-Security-Policy" content="{content_security_policy(doc)}">\n'
     doc = doc.replace('<meta charset="UTF-8">\n', '<meta charset="UTF-8">\n' + csp, 1)
     return doc, version
@@ -269,6 +280,37 @@ def sitemap(today):
     )
 
 
+def subset_fonts(out):
+    """Subset every font in OUT/assets/fonts to printable ASCII plus the
+    non-ASCII characters found in the rendered pages and main.js."""
+    try:
+        from fontTools import subset
+        from fontTools.ttLib import TTFont
+    except ImportError:
+        print("fontTools not installed: fonts published without subsetting")
+        return
+    chars = {chr(c) for c in range(0x20, 0x7F)}
+    for path in list(out.rglob("*.html")) + [out / "assets/js/main.js"]:
+        text = path.read_text(encoding="utf-8")
+        if path.suffix == ".html":
+            text = html.unescape(re.sub(r"<[^>]+>", " ", text))
+        chars |= {c for c in text if c.isprintable()}
+    unicodes = sorted(ord(c) for c in chars)
+    for font_path in sorted((out / "assets/fonts").glob("*.woff2")):
+        options = subset.Options()
+        options.flavor = "woff2"
+        options.layout_features = ["*"]
+        options.name_IDs = ["*"]
+        before = font_path.stat().st_size
+        font = TTFont(font_path)
+        subsetter = subset.Subsetter(options)
+        subsetter.populate(unicodes=unicodes)
+        subsetter.subset(font)
+        font.flavor = "woff2"
+        font.save(font_path)
+        print(f"{font_path.name}: {before} -> {font_path.stat().st_size} bytes")
+
+
 def build(out):
     dicts = load_i18n()
     template = (SITE / "index.html").read_text(encoding="utf-8")
@@ -288,6 +330,7 @@ def build(out):
         target.write_text(doc, encoding="utf-8")
         print(f"{lang}: {target.relative_to(out)} (v{version})")
     (out / "sitemap.xml").write_text(sitemap(datetime.date.today().isoformat()), encoding="utf-8")
+    subset_fonts(out)
 
 
 def sync():

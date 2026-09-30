@@ -314,7 +314,13 @@ Conventions to preserve when editing:
 - **Performance budget (Lighthouse 100 on mobile and desktop).** `build.py`
   inlines the minified stylesheet, minifies `main.js`, and replaces `i18n.js`
   with the two runtime strings (`copy`, `copied`) — so the only requests are
-  the HTML, `main.js` and the two preloaded fonts. Keep it that way: no
+  the HTML, `main.js` and the two preloaded fonts (Bricolage and Geist; Geist
+  Mono is not preloaded — its metric-matched fallback covers the swap). The
+  build also moves the inline `<style>` right after `<title>` and the JSON-LD
+  to the end of `<body>`, so head + CSS + hero fit in the first ~10 KB
+  (gzip) — the first TCP round trip on slow 4G. When fontTools is installed
+  (the Pages workflow installs it) the fonts are subset to the characters the
+  rendered pages use (90 -> 61 KB). Keep it that way: no
   third-party fonts, scripts or stylesheets, and below-the-fold sections keep
   `content-visibility: auto`. Measure with Lighthouse (mobile preset) on the
   *built* site before merging.
