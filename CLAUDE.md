@@ -255,6 +255,7 @@ docs/site/
   index.html                  the English template: semantic markup, data-i18n keys
   build.py                    pre-renders one page per language + sitemap.xml (stdlib only)
   assets/css/styles.css       design system: tokens, components, responsive, motion
+  assets/fonts/*.woff2        self-hosted latin subsets (Bricolage instanced to opsz 48, wght 600-800)
   assets/js/i18n.js           all five translations in one object
   assets/js/main.js           theme, language, nav, tabs, copy, terminal demo, reveals
   assets/og-image.src.html    source for og-image.png
@@ -296,6 +297,9 @@ Conventions to preserve when editing:
   the template, and a JSON-LD graph (SoftwareApplication + WebPage + FAQPage
   built from `q<N>`/`a<N>`). Keep FAQ answers factual — they are what search
   engines quote.
+- **Logos.** `assets/logo.svg` (repo root) is the mark; `assets/logo-dark.svg` /
+  `logo-light.svg` are the README wordmarks, with the text converted to paths
+  from the Bricolage font (GitHub does not load web fonts in SVGs).
 - **Regenerate `og-image.png`** by screenshotting `assets/og-image.src.html` at
   1200x630 (e.g. `npx playwright screenshot --viewport-size=1200,630 ...`).
 - **Keep the release notice honest.** As of v0.3.1 the published release matches
@@ -307,6 +311,26 @@ Conventions to preserve when editing:
   one when a new release is tagged, and turn the notice back into a caveat (drop
   `notice-ok`) if `main` ever runs ahead of the release again. The test count
   appears in the hero stats (`data-count`) and in `a7`.
+- **Performance budget (Lighthouse 100 on mobile and desktop).** `build.py`
+  inlines the minified stylesheet, minifies `main.js`, and replaces `i18n.js`
+  with the two runtime strings (`copy`, `copied`) — so the only requests are
+  the HTML, `main.js` and the two preloaded fonts. Keep it that way: no
+  third-party fonts, scripts or stylesheets, and below-the-fold sections keep
+  `content-visibility: auto`. Measure with Lighthouse (mobile preset) on the
+  *built* site before merging.
+- **Content Security Policy.** Every built page carries a `<meta>` CSP with
+  sha256 hashes of its inline `<script>` and `<style>` blocks and
+  `require-trusted-types-for 'script'`. Consequences: no `style="..."`
+  attributes in the markup (use classes or `el.style.setProperty`), no inline
+  event handlers, and no `innerHTML` in any code path that runs on the built
+  site (`translate()` only runs on the plain local preview). Hashes are
+  recomputed on every build, so edit inline scripts freely.
+- **Motion.** Animate only `transform` and `opacity`; ease with `--ease-out`
+  (expo-out). Scroll handlers are rAF-batched and must not read layout per
+  frame. No `backdrop-filter`: it dropped ~2.5% of frames while scrolling.
+  Grids use `.stagger` (children fade up in sequence, `--i` set by `main.js`),
+  single blocks use `.reveal`; both are only hidden under `.js`, and
+  `prefers-reduced-motion` turns everything off.
 - **Stay honest about native code.** Do not claim "zero C dependencies": zstd,
   liblzma and aws-lc are compiled in. The accurate claim is "no system libraries".
 - Verify changes by rendering the built site (headless Chromium is available):
