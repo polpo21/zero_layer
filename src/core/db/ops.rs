@@ -540,7 +540,6 @@ impl ZlDatabase {
 
     /// Record a history entry (install, remove, upgrade, etc.)
     pub fn record_history(&self, entry: &HistoryEntry) -> ZlResult<()> {
-        let key = format!("{:020}", entry.timestamp);
         let value = serde_json::to_vec(entry)?;
         let txn = self
             .db
@@ -550,6 +549,19 @@ impl ZlDatabase {
             let mut table = txn
                 .open_table(HISTORY)
                 .map_err(|e| ZlError::Config(e.to_string()))?;
+            // Timestamps have one-second resolution, so events in the same
+            // second get a zero-padded sequence suffix instead of overwriting
+            // each other. The padding keeps keys sorted chronologically.
+            let mut key = format!("{:020}", entry.timestamp);
+            let mut seq = 0u32;
+            while table
+                .get(key.as_str())
+                .map_err(|e| ZlError::Config(e.to_string()))?
+                .is_some()
+            {
+                seq += 1;
+                key = format!("{:020}-{:06}", entry.timestamp, seq);
+            }
             table
                 .insert(key.as_str(), value.as_slice())
                 .map_err(|e| ZlError::Config(e.to_string()))?;
@@ -757,5 +769,36 @@ mod tests {
         let got = db.get_package_by_name("foo").unwrap().unwrap();
         assert_eq!(got.id.name, "foo");
         assert_eq!(got.id.version, "2.0");
+    }
+
+    #[test]
+    fn test_history_entries_in_same_second_are_kept() {
+        let db = test_db();
+        for (action, pkg) in [
+            (HistoryAction::Install, "a-1.0"),
+            (HistoryAction::Remove, "b-1.0"),
+            (HistoryAction::Install, "c-1.0"),
+        ] {
+            db.record_history(&HistoryEntry {
+                timestamp: 1_700_000_000,
+                action,
+                packages: vec![pkg.into()],
+            })
+            .unwrap();
+        }
+        db.record_history(&HistoryEntry {
+            timestamp: 1_700_000_001,
+            action: HistoryAction::Install,
+            packages: vec!["d-1.0".into()],
+        })
+        .unwrap();
+
+        let packages: Vec<String> = db
+            .list_history(10)
+            .unwrap()
+            .into_iter()
+            .flat_map(|e| e.packages)
+            .collect();
+        assert_eq!(packages, ["d-1.0", "c-1.0", "b-1.0", "a-1.0"]);
     }
 }
